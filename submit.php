@@ -36,8 +36,19 @@
 
 
     <?php
-    $output = shell_exec('python course_scraper.py $_POST["course"]');
+    //check DB if Course exists
+    $db = new SQLite3('CourseReviews.db');
 
+    $stmt = $db->prepare("SELECT FROM COURSES WHERE COURSE=:course)");
+    $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
+    $result = $stmt->execute(); 
+    if ($result->numColumns()) {
+        //if not check with scraper
+        $output = shell_exec('python course_scraper.py $_POST["course"]');
+        
+    }
+    
+    //if still no there dont write to 
 
     $db = new SQLite3('CourseReviews.db');
 
