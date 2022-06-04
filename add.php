@@ -35,7 +35,7 @@
                     <legend>Review</legend>
                     <p>
                         <label for="course">Course number:</label><br>
-                        <input list="courses" id="course" name="course" placeholder="252-0027-00L" pattern="[A-Z0-9]{3}-[A-Z0-9]{4}-[A-Z0-9]{3} .*" size="80">
+                        <input list="courses" id="course" name="course" placeholder="252-0027-00L" pattern="[A-Z0-9]{3}-[A-Z0-9]{4}-[A-Z0-9]{3}( .*)?" size="80">
                         <datalist id="courses">
                             <?php
                             $db = new SQLite3('CourseReviews.db');
