@@ -42,7 +42,7 @@
     $stmt = $db->prepare("SELECT FROM COURSES WHERE COURSE=:course)");
     $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
     $result = $stmt->execute(); 
-    if ($result->numColumns()) {
+    if (!$result->numColumns()) {
         //if not check with scraper
         $output = shell_exec('python course_scraper.py $_POST["course"]');
         
