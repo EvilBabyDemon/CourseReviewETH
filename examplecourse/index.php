@@ -25,7 +25,6 @@
         <div id="columnA">
 
             <?php
-            //check DB if Course exists
             $db = new SQLite3('../CourseReviews.db');
 
             $url = $_SERVER["REQUEST_URI"];
