@@ -25,9 +25,9 @@ while (i < 10):
     hmtl_str = str(bs4.BeautifulSoup(htmlContent.text, 'lxml'))
     if (NAME in hmtl_str):
         extractedTitle = re.search(REGEX, hmtl_str).group(2)
-        
-        extractedTitle = extractedTitle.replace("&ouml;", "ö").replace(
-            "&uuml;", "ü").replace("&auml;", "ä")
+
+        extractedTitle = extractedTitle.replace("&ouml;", "ö").replace("&uuml;", "ü").replace(
+            "&auml;", "ä").replace("&Ouml;", "Ö").replace("&Uuml;", "Ü").replace("&Auml;", "Ä")
         print(extractedTitle)
         exit()
     # Course wasn't found that Semester will check next.
