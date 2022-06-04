@@ -50,8 +50,6 @@
     
     //if still no there dont write to 
 
-    $db = new SQLite3('CourseReviews.db');
-
     $stmt = $db->prepare("INSERT INTO REVIEWS (ID, COURSE, REVIEW) VALUES (:id, :course, :review)");
     $stmt->bindParam(':id', $val, SQLITE3_TEXT);
     $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
