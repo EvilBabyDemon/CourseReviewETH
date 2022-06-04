@@ -16,9 +16,9 @@
     </div>
     <div id="menu">
         <ul>
-            <li><a href="../" onFocus="if(this.blur)this.blur()">Home</a></li>
-            <li><a href="../download/" onFocus="if(this.blur)this.blur()">Download</a></li>
-            <li><a href="#" onFocus="if(this.blur)this.blur()">Private</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
         </ul>
     </div>
     <?php
@@ -30,7 +30,31 @@
         <div id="columnA">
 
             <b>Here will you be able to edit your Reviews.</b><br>
-            Just change the text in the fields and press on the button.<br>
+            Just change the text in the fields and press on the button. Submitting a blank review will delete it.<br>
+
+            <?php
+            if (isset($_POST["course"])) {
+
+                //Edit db entry
+                if ("" == trim($_POST['review'])) {
+                    $db = new SQLite3('CourseReviews.db');
+                    $stmt = $db->prepare("DELETE FROM REVIEWS WHERE COURSE = :course AND ID = :id");
+                    $stmt->bindParam(':id', $val, SQLITE3_TEXT);
+                    $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
+                    $stmt->execute();
+                    $db->close();
+                } else {
+                    $db = new SQLite3('CourseReviews.db');
+                    $stmt = $db->prepare("UPDATE REVIEWS SET REVIEW = :review WHERE COURSE = :course AND ID = :id");
+                    $stmt->bindParam(':id', $val, SQLITE3_TEXT);
+                    $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
+                    $stmt->bindParam(':review', $_POST["review"], SQLITE3_TEXT);
+                    $stmt->execute();
+                    $db->close();
+                }
+                echo "<b>Entry updated</b>";
+            }
+            ?>
 
             <?php
             //check DB if Course exists
@@ -43,7 +67,7 @@
             $test = true;
             while ($row = $result->fetchArray()) {
             ?>
-                <form method="post" action="edited.php">
+                <form method="post" action="edit.php">
                     <fieldset>
                         <legend>Review</legend>
                         <label>
