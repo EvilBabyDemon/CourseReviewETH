@@ -28,36 +28,40 @@
     ?>
     <div id="content">
         <div id="columnA">
-            <p><b>Thx for submitting!</b><br>
-                <?php echo $_POST["course"]; ?>
-                <?php echo $_POST["review"]; ?>
+            <p><b>Thx for submission!</b><br>
+
+                <?php
+                //check DB if Course exists
+
+                $course = substr($_POST["course"], 0, strpos($_POST["course"], " "));
+
+                $db = new SQLite3('CourseReviews.db');
+
+                $stmt = $db->prepare("SELECT * FROM COURSES WHERE COURSE=:course");
+                $stmt->bindParam(':course', $course, SQLITE3_TEXT);
+                $result = $stmt->execute();
+                if (!$row = $result->fetchArray()) {
+                    print "<p>But are you sure this course ($course) exists? If it does contact me: lteufelbe@ethz.ch <br> I didn't save it. But here you can copy your text again:</p> <br>";
+                    echo $_POST["review"];
+                    exit();
+                }
+
+                //if still no there dont write to 
+
+                $db = new SQLite3('CourseReviews.db');
+                $stmt = $db->prepare("INSERT INTO REVIEWS (ID, COURSE, REVIEW) VALUES (:id, :course, :review)");
+                $stmt->bindParam(':id', $val, SQLITE3_TEXT);
+                $stmt->bindParam(':course', $course, SQLITE3_TEXT);
+                $stmt->bindParam(':review', $_POST["review"], SQLITE3_TEXT);
+                $stmt->execute();
+                $db->close();
+
+                echo $_POST["course"];
+                print "<br>";
+                echo $_POST["review"];
+                ?>
         </div>
     </div>
-
-
-    <?php
-    //check DB if Course exists
-    //$db = new SQLite3('CourseReviews.db');
-
-    //$stmt = $db->prepare("SELECT FROM COURSES WHERE COURSE=:course)");
-    //$stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
-    //$result = $stmt->execute();
-    //if (!$result->numColumns()) {
-        //if not check with scraper
-    //    $output = shell_exec('python course_scraper.py $_POST["course"]');
-        
-    //}
-    
-    //if still no there dont write to 
-    $db = new SQLite3('CourseReviews.db');
-    $stmt = $db->prepare("INSERT INTO REVIEWS (ID, COURSE, REVIEW) VALUES (:id, :course, :review)");
-    $stmt->bindParam(':id', $val, SQLITE3_TEXT);
-    $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
-    $stmt->bindParam(':review', $_POST["review"], SQLITE3_TEXT);
-    $stmt->execute();
-    $db->close();
-    ?>
-
 
 
     <div id="footer">
