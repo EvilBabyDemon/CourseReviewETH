@@ -6,7 +6,7 @@
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="../default.css" rel="stylesheet" type="text/css" />
+    <link href="../../default.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -26,19 +26,27 @@
 
             <?php
             //check DB if Course exists
-            $db = new SQLite3('CourseReviews.db');
+            $db = new SQLite3('../CourseReviews.db');
+
+            $url = $_SERVER["REQUEST_URI"];
+            $url = substr($url, strpos($url, "coursereview"), strlen($url));
+            $url = str_replace("coursereview/", "", $url);
+            $url = substr($url, 0, strpos($url, "/"));
             
-            $url = str_replace("/~lteufelbe/coursereview/", "", $_SERVER["REQUEST_URI"]);
-            $url = substr($url, 0, strpos($url, "/"));  
-            
-            $stmt = $db->prepare("SELECT FROM REVIEWS WHERE COURSE=:course)");
+            $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE COURSE=:course");
             $stmt->bindParam(':course', $url, SQLITE3_TEXT);
             $result = $stmt->execute();
-            if (!$result->numColumns()) {
-                system("echo 'There was a review once here, but sadly it is gone';");
-                exit();
+            
+            $empty = true;
+            while ($row = $result->fetchArray()) {
+                print $row[2];
+                print "<hr>";
+                $empty = false;
             }
-            var_dump($result->fetchArray());
+
+            if ($empty) {
+                echo 'There was a review once here, but sadly it is gone';
+            }
             $db->close()
             ?>
 
