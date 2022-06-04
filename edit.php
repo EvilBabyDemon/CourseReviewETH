@@ -47,9 +47,9 @@
                     <fieldset>
                         <legend>Review</legend>
                         <label>
-                            <?php echo $row[1]; ?>
+                            <input style="color:red" type="text" name="course" value="<?php echo $row[1]; ?>" readonly>
                             <br>
-                            <textarea name="<?php echo $row[0]; ?>" cols="50" rows="3"><?php echo $row[2]; ?></textarea>
+                            <textarea name="review" cols="50" rows="3"><?php echo $row[2]; ?></textarea>
                         </label>
                         <p>
                             <button type="submit">Edit</button>
