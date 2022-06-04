@@ -28,7 +28,44 @@
     ?>
     <div id="content">
         <div id="columnA">
-            <p><b>Here will you be able to edit your Reviews.</b><br>
+
+            <b>Here will you be able to edit your Reviews.</b><br>
+            Just change the text in the fields and press on the button.<br>
+
+            <?php
+            //check DB if Course exists
+            $db = new SQLite3('CourseReviews.db');
+
+            $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE ID=:id");
+            $stmt->bindParam(':id', $val, SQLITE3_TEXT);
+            $result = $stmt->execute();
+
+            $test = true;
+            while ($row = $result->fetchArray()) {
+            ?>
+                <form method="post" action="edited.php">
+                    <fieldset>
+                        <legend>Review</legend>
+                        <label>
+                            <?php echo $row[1]; ?>
+                            <br>
+                            <textarea name="<?php echo $row[0]; ?>" cols="50" rows="3"><?php echo $row[2]; ?></textarea>
+                        </label>
+                        <p>
+                            <button type="submit">Edit</button>
+                        </p>
+                    </fieldset>
+                </form>
+
+            <?php
+                $test = false;
+            }
+            if ($test) {
+                print "You didn't review anything yet.";
+            }
+
+            $db->close()
+            ?>
 
         </div>
     </div>
