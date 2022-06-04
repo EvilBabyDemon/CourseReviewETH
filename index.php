@@ -28,11 +28,11 @@
     ?>
     <div id="content">
         <div id="columnA">
-            <h2>Welcome <?php system("echo '$name $surname';"); ?>!</h2>
+            <h2>Welcome <?php echo "$name $surname"; ?>!</h2>
             <p><b>CourseReview</b><br>
                 Everyone logged in should see this! </p>
-                <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
-                <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
+            <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
+            <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
             </p>
 
         </div>
