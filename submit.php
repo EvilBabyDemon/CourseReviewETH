@@ -41,7 +41,7 @@
 
     $stmt = $db->prepare("SELECT FROM COURSES WHERE COURSE=:course)");
     $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
-    $result = $stmt->execute(); 
+    $result = $stmt->execute();
     if (!$result->numColumns()) {
         //if not check with scraper
         $output = shell_exec('python course_scraper.py $_POST["course"]');
@@ -57,6 +57,7 @@
     $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
     $stmt->bindParam(':review', $_POST["review"], SQLITE3_TEXT);
     $stmt->execute();
+    $db->close()
     ?>
 
 
