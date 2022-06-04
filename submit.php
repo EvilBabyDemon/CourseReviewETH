@@ -16,9 +16,9 @@
     </div>
     <div id="menu">
         <ul>
-            <li><a href="../" onFocus="if(this.blur)this.blur()">Home</a></li>
-            <li><a href="../download/" onFocus="if(this.blur)this.blur()">Download</a></li>
-            <li><a href="#" onFocus="if(this.blur)this.blur()">Private</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
         </ul>
     </div>
     <?php
@@ -37,19 +37,19 @@
 
     <?php
     //check DB if Course exists
-    $db = new SQLite3('CourseReviews.db');
+    //$db = new SQLite3('CourseReviews.db');
 
-    $stmt = $db->prepare("SELECT FROM COURSES WHERE COURSE=:course)");
-    $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
-    $result = $stmt->execute();
-    if (!$result->numColumns()) {
+    //$stmt = $db->prepare("SELECT FROM COURSES WHERE COURSE=:course)");
+    //$stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
+    //$result = $stmt->execute();
+    //if (!$result->numColumns()) {
         //if not check with scraper
-        $output = shell_exec('python course_scraper.py $_POST["course"]');
+    //    $output = shell_exec('python course_scraper.py $_POST["course"]');
         
-    }
+    //}
     
     //if still no there dont write to 
-
+    $db = new SQLite3('CourseReviews.db');
     $stmt = $db->prepare("INSERT INTO REVIEWS (ID, COURSE, REVIEW) VALUES (:id, :course, :review)");
     $stmt->bindParam(':id', $val, SQLITE3_TEXT);
     $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);

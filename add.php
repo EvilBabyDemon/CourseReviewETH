@@ -16,9 +16,9 @@
     </div>
     <div id="menu">
         <ul>
-            <li><a href="../" onFocus="if(this.blur)this.blur()">Home</a></li>
-            <li><a href="../download/" onFocus="if(this.blur)this.blur()">Download</a></li>
-            <li><a href="#" onFocus="if(this.blur)this.blur()">Private</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
+            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
         </ul>
     </div>
     <?php
