@@ -47,7 +47,7 @@
             if ($empty) {
                 echo 'There was a review once here, but sadly it is gone';
             }
-            $db->close()
+            $db->close();
             ?>
 
         </div>

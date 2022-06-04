@@ -64,7 +64,7 @@
                 print "You didn't review anything yet.";
             }
 
-            $db->close()
+            $db->close();
             ?>
 
         </div>

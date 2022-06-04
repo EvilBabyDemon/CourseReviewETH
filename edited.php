@@ -39,7 +39,7 @@
             $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
             $stmt->bindParam(':review', $_POST["review"], SQLITE3_TEXT);
             $stmt->execute();
-            $db->close()
+            $db->close();
             ?>
 
         </div>
