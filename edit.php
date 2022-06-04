@@ -71,7 +71,7 @@
                     <fieldset>
                         <legend>Review</legend>
                         <label>
-                            <input style="color:red" type="text" name="course" value="<?php echo $row[1]; ?>" readonly>
+                            <textarea style="color:red" name="course" cols="30" rows="2" readonly><?php echo $row[1]; ?></textarea>
                             <br>
                             <textarea name="review" cols="50" rows="3"><?php echo $row[2]; ?></textarea>
                         </label>
