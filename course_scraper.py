@@ -29,13 +29,9 @@ while (i < 10):
         extractedTitle = extractedTitle.replace("&ouml;", "ö").replace(
             "&uuml;", "ü").replace("&auml;", "ä")
         print(extractedTitle)
+        exit()
     # Course wasn't found that Semester will check next.
     if (flipflop):
         year -= 1
     flipflop = not flipflop
     i += 1
-    exit()
-
-
-#risiko = soupRisiko.select('div[id~=accordion1601047080607]')
-#zahlen = soupZahlen.select('div[class~=mod mod-text]')
