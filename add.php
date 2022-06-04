@@ -35,7 +35,21 @@
                     <legend>Review</legend>
                     <p>
                         <label for="course">Course number:</label><br>
-                        <input type="text" id="course" name="course" pattern="[A-Z0-9]{3}-[A-Z0-9]{4}-[A-Z0-9]{3}" placeholder="252-0027-00L">
+                        <input list="courses" id="course" name="course" placeholder="252-0027-00L" pattern="[A-Z0-9]{3}-[A-Z0-9]{4}-[A-Z0-9]{3} .*" size="80">
+                        <datalist id="courses">
+                            <?php
+                            $db = new SQLite3('CourseReviews.db');
+                            $stmt = $db->prepare("SELECT * FROM COURSES");
+                            $result = $stmt->execute();
+
+                            while ($row = $result->fetchArray()) {
+                            ?>
+                                <option value="<?php echo "$row[0] $row[1]"; ?>">
+                                <?php
+                            }
+                            $db->close();
+                                ?>
+                        </datalist>
                     </p>
                     <p>
                         <label>
