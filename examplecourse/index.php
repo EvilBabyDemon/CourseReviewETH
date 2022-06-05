@@ -6,7 +6,7 @@
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="../../default.css" rel="stylesheet" type="text/css" />
+    <link href="/~lteufelbe/default.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -25,28 +25,39 @@
         <div id="columnA">
 
             <?php
-            $db = new SQLite3('../CourseReviews.db');
+
 
             $url = $_SERVER["REQUEST_URI"];
             $url = substr($url, strpos($url, "coursereview"), strlen($url));
             $url = str_replace("coursereview/", "", $url);
             $url = substr($url, 0, strpos($url, "/"));
 
-            $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE COURSE=:course");
+            $db = new SQLite3('../CourseReviews.db');
+            $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
             $stmt->bindParam(':course', $url, SQLITE3_TEXT);
             $result = $stmt->execute();
+            if ($course = $result->fetchArray()) {
+                print "<b>$url $course[0]</b><br>";
+                $db->close();
+                $db = new SQLite3('../CourseReviews.db');
+                $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE COURSE=:course");
+                $stmt->bindParam(':course', $url, SQLITE3_TEXT);
+                $result = $stmt->execute();
 
-            $empty = true;
-            while ($row = $result->fetchArray()) {
-                print $row[2];
-                print "<hr>";
-                $empty = false;
-            }
+                $empty = true;
+                while ($row = $result->fetchArray()) {
+                    print $row[2];
+                    print "<hr>";
+                    $empty = false;
+                }
 
-            if ($empty) {
-                echo 'There was a review once here, but sadly it is gone';
+                if ($empty) {
+                    echo 'There is no review here yet, please add one if you visited the course already!';
+                }
+                $db->close();
+            } else {
+                echo 'This is no course nor does this page exist. So here you have an error code: <b>404</b>';
             }
-            $db->close();
             ?>
 
         </div>
