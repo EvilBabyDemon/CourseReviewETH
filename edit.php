@@ -66,12 +66,17 @@
 
             $test = true;
             while ($row = $result->fetchArray()) {
+                $dbc = new SQLite3('CourseReviews.db');
+                $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
+                $stmtc->bindParam(':course', $row[1], SQLITE3_TEXT);
+                $resultc = $stmtc->execute();
+                $rowc = $resultc->fetchArray();
             ?>
                 <form method="post" action="edit.php">
                     <fieldset>
                         <legend>Review</legend>
                         <label>
-                            <textarea style="color:red" name="course" cols="30" rows="2" readonly><?php echo $row[1]; ?></textarea>
+                            <textarea style="color:red" name="course" cols="30" rows="2" readonly><?php echo "$row[1] $rowc[0]"; ?></textarea>
                             <br>
                             <textarea name="review" cols="50" rows="3"><?php echo $row[2]; ?></textarea>
                         </label>
@@ -82,12 +87,12 @@
                 </form>
 
             <?php
+                $dbc->close();
                 $test = false;
             }
             if ($test) {
                 print "You didn't review anything yet.";
             }
-
             $db->close();
             ?>
 
