@@ -59,7 +59,7 @@
             }
             ?>
             <form method="post" action="#">
-                <input list="courses" id="course" name="course" placeholder="Search for Reviews" pattern="[A-Z0-9]{3}-[A-Z0-9]{4}-[A-Z0-9]{3}( .*)?" size="40">
+                <input list="courses" id="course" name="course" placeholder="Search for Reviews" size="40">
                 <datalist id="courses">
                     <?php
                     $db = new SQLite3('CourseReviews.db');
