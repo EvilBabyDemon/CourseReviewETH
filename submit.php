@@ -28,7 +28,7 @@
     ?>
     <div id="content">
         <div id="columnA">
-            <p><b>Thx for submission!</b><br>
+            <p><b>Thx for your submission!</b><br>
 
                 <?php
                 //check DB if Course exists
@@ -45,7 +45,7 @@
                     echo $_POST["review"];
                     exit();
                 }
-
+                $db->close();
                 //if still no there dont write to 
 
                 $db = new SQLite3('CourseReviews.db');
