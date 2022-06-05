@@ -57,7 +57,6 @@
             ?>
 
             <?php
-            //check DB if Course exists
             $db = new SQLite3('CourseReviews.db');
 
             $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE ID=:id");
