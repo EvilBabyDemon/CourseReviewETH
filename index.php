@@ -78,15 +78,14 @@
             </form>
 
             <h2>Welcome <?php echo "$name $surname"; ?>!</h2>
-            <p><b>CourseReview</b><br>
-                Here you can add and read reviews of courses from ETHZ! </p>
+            <p>Here you can add and read reviews of courses from ETHZ!</p>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
             </p>
 
         </div>
         <div id="footer">
-            <p>If you think something is wrong or have any suggestion please contact me: lteufelbe@ethz.ch</p>
+            <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:lteufelbe@ethz.ch">lteufelbe@ethz.ch</a></p>
         </div>
     </div>
 </body>

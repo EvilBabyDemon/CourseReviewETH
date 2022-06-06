@@ -65,7 +65,7 @@
 
 
     <div id="footer">
-        <p>If you think something is wrong or have any suggestion please contact me: lteufelbe@ethz.ch</p>
+        <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:lteufelbe@ethz.ch">lteufelbe@ethz.ch</a></p>
     </div>
 
 </body>

@@ -25,8 +25,6 @@
         <div id="columnA">
 
             <?php
-
-
             $url = $_SERVER["REQUEST_URI"];
             $url = substr($url, strpos($url, "coursereview"), strlen($url));
             $url = str_replace("coursereview/", "", $url);
@@ -39,6 +37,7 @@
             if ($course = $result->fetchArray()) {
                 print "<b>$url $course[0]</b><br>";
                 $db->close();
+
                 $db = new SQLite3('../CourseReviews.db');
                 $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE COURSE=:course");
                 $stmt->bindParam(':course', $url, SQLITE3_TEXT);
@@ -62,7 +61,7 @@
 
         </div>
         <div id="footer">
-            <p>Nothing interesting to see here</p>
+            <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:lteufelbe@ethz.ch">lteufelbe@ethz.ch</a></p>
         </div>
     </div>
 </body>
