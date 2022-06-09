@@ -47,7 +47,9 @@
                 }
                 $db->close();
                 //if still no there dont write to 
-
+                
+                //change to api call
+                //shouldnt be a problem as I am only submitting data
                 $db = new SQLite3('CourseReviews.db');
                 $stmt = $db->prepare("INSERT INTO REVIEWS (ID, COURSE, REVIEW) VALUES (:id, :course, :review)");
                 $stmt->bindParam(':id', $val, SQLITE3_TEXT);

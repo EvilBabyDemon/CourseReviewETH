@@ -38,6 +38,7 @@
                 print "<b>$url $course[0]</b><br>";
                 $db->close();
 
+                //API call with wait or smth? Could I also cache or smth?
                 $db = new SQLite3('../CourseReviews.db');
                 $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE COURSE=:course");
                 $stmt->bindParam(':course', $url, SQLITE3_TEXT);
