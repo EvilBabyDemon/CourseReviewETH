@@ -43,24 +43,46 @@
                 if (!$row = $result->fetchArray()) {
                     print "<p>But are you sure this course ($course) exists? If it does contact me: lteufelbe@ethz.ch <br> I didn't save it. But here you can copy your text again:</p> <br>";
                     echo $_POST["review"];
+                    $db->close();
                     exit();
                 }
                 $db->close();
-                //if still no there dont write to 
-                
-                //change to api call
-                //shouldnt be a problem as I am only submitting data
-                $db = new SQLite3('CourseReviews.db');
-                $stmt = $db->prepare("INSERT INTO REVIEWS (ID, COURSE, REVIEW) VALUES (:id, :course, :review)");
-                $stmt->bindParam(':id', $val, SQLITE3_TEXT);
-                $stmt->bindParam(':course', $course, SQLITE3_TEXT);
-                $stmt->bindParam(':review', $_POST["review"], SQLITE3_TEXT);
-                $stmt->execute();
-                $db->close();
 
-                echo $_POST["course"];
-                print "<br>";
-                echo $_POST["review"];
+                $data = array(
+                    'course_id' => $course,
+                    'nethz' => $val,
+                    'review' => $_POST["review"],
+                );
+                $post_data = json_encode($data);
+                print var_dump($post_data);
+                $ch = curl_init("https://rubberducky.vsos.ethz.ch:1855/insert");
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+
+                // Set HTTP Header for POST request
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+
+                $result = curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                // Close cURL session handle
+                curl_close($ch);
+                print var_dump($code);
+                // handle curl error
+                if ($code != 200) {
+                    print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:</p> <br>";
+                    echo $_POST["review"];
+                    print var_dump($result);
+                } else {
+
+                    print $result;
+                    echo $_POST["course"];
+                    print "<br>";
+                    echo $_POST["review"];
+                }
                 ?>
         </div>
     </div>

@@ -57,42 +57,55 @@
             ?>
 
             <?php
-            $db = new SQLite3('CourseReviews.db');
+            $ducky = "https://rubberducky.vsos.ethz.ch:1855/user/";
+            $ducky = $ducky . $val;
+            $ch = curl_init();
+            curl_setopt($ch, CURLOPT_URL, $ducky);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
 
-            $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE ID=:id");
-            $stmt->bindParam(':id', $val, SQLITE3_TEXT);
-            $result = $stmt->execute();
+            $result = curl_exec($ch);
+            $info = curl_getinfo($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            curl_close($ch);
 
-            $test = true;
-            while ($row = $result->fetchArray()) {
-                $dbc = new SQLite3('CourseReviews.db');
-                $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
-                $stmtc->bindParam(':course', $row[1], SQLITE3_TEXT);
-                $resultc = $stmtc->execute();
-                $rowc = $resultc->fetchArray();
+            print $code;
+
+            if (strlen($result) == 2) {
+                echo "You didn't submit anything yet";
+            } else {
+
+                var_dump($result);
+                $js = json_decode($result, false);
+                var_dump($js);
+
+                foreach ($js as $key => $val) {
+                    foreach ($val as $nkey => $review) {
+                        echo "<hr>" . $review;
+
+                        $dbc = new SQLite3('CourseReviews.db');
+                        $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
+                        $stmtc->bindParam(':course', $nkey, SQLITE3_TEXT);
+                        $resultc = $stmtc->execute();
+                        $rowc = $resultc->fetchArray();
             ?>
-                <form method="post" action="edit.php">
-                    <fieldset>
-                        <legend>Review</legend>
-                        <label>
-                            <textarea style="color:red" name="course" cols="30" rows="2" readonly><?php echo "$row[1] $rowc[0]"; ?></textarea>
-                            <br>
-                            <textarea name="review" cols="50" rows="3"><?php echo $row[2]; ?></textarea>
-                        </label>
-                        <p>
-                            <button type="submit">Edit</button>
-                        </p>
-                    </fieldset>
-                </form>
-
+                        <form method="post" action="edit.php">
+                            <fieldset>
+                                <legend>Review</legend>
+                                <label>
+                                    <textarea style="color:red" name="course" cols="30" rows="2" readonly><?php echo "$nkey $rowc[0]"; ?></textarea>
+                                    <br>
+                                    <textarea name="review" cols="50" rows="3"><?php echo $nkey; ?></textarea>
+                                </label>
+                                <p>
+                                    <button type="submit">Edit</button>
+                                </p>
+                            </fieldset>
+                        </form>
             <?php
-                $dbc->close();
-                $test = false;
+                    }
+                }
             }
-            if ($test) {
-                print "You didn't review anything yet.";
-            }
-            $db->close();
             ?>
 
         </div>
