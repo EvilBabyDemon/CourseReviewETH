@@ -11,7 +11,7 @@
 
 <body>
     <div id="header">
-        <h1>CourseReview coming up</h1>
+        <h1>CourseReviev</h1>
         <h2>&nbsp;</h2>
     </div>
     <div id="menu">
@@ -34,6 +34,46 @@
 
             <?php
             if (isset($_POST["course"])) {
+
+                //change this to fit
+                $data = array(
+                    'course_id' => $course,
+                    'nethz' => $val,
+                    'review' => $_POST["review"],
+                );
+                $post_data = json_encode($data);
+                $ducky = "https://rubberducky.vsos.ethz.ch:1855/remove?";
+                $ducky = $ducky . http_build_query($data);
+
+                $ch = curl_init($ducky);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                //curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
+                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+
+                // Set HTTP Header for POST request
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+
+                $result = curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                // Close cURL session handle
+                curl_close($ch);
+                // handle curl error
+                if ($code != 200) {
+                    print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:</p> <br>";
+                    echo $_POST["review"];
+                } else {
+
+                    print $result;
+                    echo $_POST["course"];
+                    print "<br>";
+                    echo $_POST["review"];
+                }
+
+
+
 
                 //Edit db entry
                 if ("" == trim($_POST['review'])) {
@@ -75,35 +115,31 @@
                 echo "You didn't submit anything yet";
             } else {
 
-                var_dump($result);
                 $js = json_decode($result, false);
-                var_dump($js);
 
                 foreach ($js as $key => $val) {
-                    foreach ($val as $nkey => $review) {
-                        echo "<hr>" . $review;
+                    $dbc = new SQLite3('CourseReviews.db');
+                    $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
+                    $stmtc->bindParam(':course', $val[1], SQLITE3_TEXT);
+                    $resultc = $stmtc->execute();
+                    $rowc = $resultc->fetchArray();
 
-                        $dbc = new SQLite3('CourseReviews.db');
-                        $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
-                        $stmtc->bindParam(':course', $nkey, SQLITE3_TEXT);
-                        $resultc = $stmtc->execute();
-                        $rowc = $resultc->fetchArray();
+                    echo "<hr> $val[1] $rowc[0]";
             ?>
-                        <form method="post" action="edit.php">
-                            <fieldset>
-                                <legend>Review</legend>
-                                <label>
-                                    <textarea style="color:red" name="course" cols="30" rows="2" readonly><?php echo "$nkey $rowc[0]"; ?></textarea>
-                                    <br>
-                                    <textarea name="review" cols="50" rows="3"><?php echo $nkey; ?></textarea>
-                                </label>
-                                <p>
-                                    <button type="submit">Edit</button>
-                                </p>
-                            </fieldset>
-                        </form>
+                    <form method="post" action="edit.php">
+                        <fieldset>
+                            <legend>Review</legend>
+                            <label>
+                                <input style="color:red" name="course" size="10" value="<?php echo $val[1]; ?>" readonly>
+                                <br>
+                                <textarea name="review" cols="50" rows="3"><?php echo $val[0]; ?></textarea>
+                            </label>
+                            <p>
+                                <button type="submit">Edit</button>
+                            </p>
+                        </fieldset>
+                    </form>
             <?php
-                    }
                 }
             }
             ?>
