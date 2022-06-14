@@ -11,7 +11,7 @@
 
 <body>
     <div id="header">
-        <h1>CourseReviev</h1>
+        <h1>CourseReview</h1>
         <h2>&nbsp;</h2>
     </div>
     <div id="menu">
