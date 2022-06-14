@@ -56,7 +56,7 @@
                 
                 foreach ($js as $key => $val) {
                     foreach ($val as $nkey => $review) {
-                        echo "<hr>" . htmlspecialchars($review) ;
+                        echo "<hr>" . htmlspecialchars($review);
                     }
                 }
 
