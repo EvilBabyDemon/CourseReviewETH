@@ -36,26 +36,35 @@
             if (isset($_POST["course"])) {
 
                 //change this to fit
-                $data = array(
-                    'course_id' => $course,
-                    'nethz' => $val,
-                    'review' => $_POST["review"],
-                );
-                $post_data = json_encode($data);
-                $ducky = "https://rubberducky.vsos.ethz.ch:1855/remove?";
-                $ducky = $ducky . http_build_query($data);
 
-                $ch = curl_init($ducky);
+                $ducky = "https://rubberducky.vsos.ethz.ch:1855/";
+
+                $ch = curl_init();
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                 curl_setopt($ch, CURLOPT_POST, true);
-                //curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
                 curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-
                 // Set HTTP Header for POST request
                 curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 
+                //Edit entry
+                if ("" == trim($_POST['review'])) {
+                    $data = array(
+                        'course_id' => $_POST["course"],
+                        'nethz' => $val,
+                    );
+                    $ducky = $ducky . "remove?" . http_build_query($data);
+                } else {
+                    $data = array(
+                        'course_id' => $_POST["course"],
+                        'nethz' => $val,
+                        'review' => $_POST["review"],
+                    );
+                    $ducky = $ducky . "update?" . http_build_query($data);
+                }
+
+                curl_setopt($ch, CURLOPT_URL, $ducky);
                 $result = curl_exec($ch);
                 $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 // Close cURL session handle
@@ -65,34 +74,21 @@
                     print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:</p> <br>";
                     echo $_POST["review"];
                 } else {
-
-                    print $result;
-                    echo $_POST["course"];
-                    print "<br>";
-                    echo $_POST["review"];
+                    if ($result == "fail") {
+                        print "This course review doesn't exist in my database. Not sure where the problem lies. Maybe contact me if you think this is an error on my side. Here you can copy your text again as I did not save it:</p> <br>";
+                        echo $_POST["review"];
+                    } else {
+                        echo "<br><b>Entry updated</b> It must be verified again, before it will show up. Give it some time.<br>";
+                        if ("" == trim($_POST['review'])) {
+                            print "Review of " . $_POST["course"] . " got removed.";
+                        } else {
+                            echo $_POST["course"];
+                            print "<br>";
+                            echo $_POST["review"];
+                            print "<br>";
+                        }
+                    }
                 }
-
-
-
-
-                //Edit db entry
-                if ("" == trim($_POST['review'])) {
-                    $db = new SQLite3('CourseReviews.db');
-                    $stmt = $db->prepare("DELETE FROM REVIEWS WHERE COURSE = :course AND ID = :id");
-                    $stmt->bindParam(':id', $val, SQLITE3_TEXT);
-                    $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
-                    $stmt->execute();
-                    $db->close();
-                } else {
-                    $db = new SQLite3('CourseReviews.db');
-                    $stmt = $db->prepare("UPDATE REVIEWS SET REVIEW = :review WHERE COURSE = :course AND ID = :id");
-                    $stmt->bindParam(':id', $val, SQLITE3_TEXT);
-                    $stmt->bindParam(':course', $_POST["course"], SQLITE3_TEXT);
-                    $stmt->bindParam(':review', $_POST["review"], SQLITE3_TEXT);
-                    $stmt->execute();
-                    $db->close();
-                }
-                echo "<b>Entry updated</b>";
             }
             ?>
 
@@ -106,13 +102,10 @@
 
             $result = curl_exec($ch);
             $info = curl_getinfo($ch);
-            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             curl_close($ch);
 
-            print $code;
-
             if (strlen($result) == 2) {
-                echo "You didn't submit anything yet";
+                echo "You didn't submit anything yet.";
             } else {
 
                 $js = json_decode($result, false);
@@ -124,7 +117,14 @@
                     $resultc = $stmtc->execute();
                     $rowc = $resultc->fetchArray();
 
-                    echo "<hr> $val[1] $rowc[0]";
+                    echo "<hr>";
+                    if ($val[2] == 0) {
+                        echo "<b>Not yet verified!</b><br>";
+                    } elseif ($val[2] == -1) {
+                        echo "<div style='color:red;'>Review was rejected! Edit it and remove anything thats attacking a person or anything else that might got it rejected.</div><br>";
+                    }
+
+                    echo "$val[1] $rowc[0]";
             ?>
                     <form method="post" action="edit.php">
                         <fieldset>
