@@ -28,7 +28,7 @@
     ?>
     <div id="content">
         <div id="columnA">
-            <p><b>Thx for your submission!</b><br>
+            <p><b>Thx for your submission!</b></p>
 
                 <?php
                 //check DB if Course exists
@@ -72,10 +72,16 @@
                 curl_close($ch);
                 // handle curl error
                 if ($code != 200) {
-                    print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:</p> <br>";
+                    print "Error Code: $code <br>";
+                    print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:<br>";
                     echo htmlspecialchars($_POST["review"]);
+                    
                 } else {
-                    print "We will verify your review to make sure it isn't attacking anyones honour.<br>";
+                    if($result == '"inserted"'){
+                        print "<p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
+                    } else {
+                        print 'You already inserted a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
+                    }
                     echo htmlspecialchars($_POST["course"]);
                     print "<br>";
                     echo htmlspecialchars($_POST["review"]);
