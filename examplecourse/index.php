@@ -1,24 +1,35 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
+
+<?php
+$nethz = $_SERVER["REQUEST_URI"];
+if (strstr($nethz, "/student") and strstr($nethz, "/student", true) == "") {
+    $nethz = substr($nethz, 9, strlen($nethz));
+} else {
+    $nethz = substr($nethz, 2, strlen($nethz));
+}
+$nethz = substr($nethz, 0, strpos($nethz, "/"));
+?>
 
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="/~lteufelbe/default.css" rel="stylesheet" type="text/css" />
+    <link href="/~<?php echo $nethz;?>/default.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <div id="header">
-        <h1>CourseReview coming up</h1>
+        <h1>CourseReview</h1>
         <h2>&nbsp;</h2>
     </div>
     <div id="menu">
         <ul>
-            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
-            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
-            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
+            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
+            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
+            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
         </ul>
     </div>
     <div id="content">
@@ -45,8 +56,7 @@
 
                 $empty = true;
                 while ($row = $result->fetchArray()) {
-                    print $row[2];
-                    print "<hr>";
+                    echo "<hr" . htmlspecialchars($row[2]);
                     $empty = false;
                 }
 
@@ -61,7 +71,7 @@
 
         </div>
         <div id="footer">
-            <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:lteufelbe@ethz.ch">lteufelbe@ethz.ch</a></p>
+            <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:<?php echo $nethz;?>@ethz.ch"><?php echo $nethz;?>@ethz.ch</a></p>
         </div>
     </div>
 </body>
