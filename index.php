@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src https:">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>CourseReview</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
