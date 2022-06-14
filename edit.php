@@ -72,19 +72,19 @@
                 // handle curl error
                 if ($code != 200) {
                     print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:</p> <br>";
-                    echo $_POST["review"];
+                    echo htmlspecialchars($_POST["review"]);
                 } else {
                     if ($result == "fail") {
                         print "This course review doesn't exist in my database. Not sure where the problem lies. Maybe contact me if you think this is an error on my side. Here you can copy your text again as I did not save it:</p> <br>";
-                        echo $_POST["review"];
+                        echo htmlspecialchars($_POST["review"]);
                     } else {
                         echo "<br><b>Entry updated</b> It must be verified again, before it will show up. Give it some time.<br>";
                         if ("" == trim($_POST['review'])) {
-                            print "Review of " . $_POST["course"] . " got removed.";
+                            print "Review of " . htmlspecialchars($_POST["course"]) . " got removed.";
                         } else {
-                            echo $_POST["course"];
+                            echo htmlspecialchars($_POST["course"]);
                             print "<br>";
-                            echo $_POST["review"];
+                            echo htmlspecialchars($_POST["review"]);
                             print "<br>";
                         }
                     }
@@ -124,15 +124,15 @@
                         echo "<div style='color:red;'>Review was rejected! Edit it and remove anything thats attacking a person or anything else that might got it rejected.</div><br>";
                     }
 
-                    echo "$val[1] $rowc[0]";
+                    echo htmlspecialchars("$val[1] $rowc[0]");
             ?>
                     <form method="post" action="edit.php">
                         <fieldset>
                             <legend>Review</legend>
                             <label>
-                                <input style="color:red" name="course" size="10" value="<?php echo $val[1]; ?>" readonly>
+                                <input style="color:red" name="course" size="10" value="<?php echo htmlspecialchars($val[1]); ?>" readonly>
                                 <br>
-                                <textarea name="review" cols="50" rows="3"><?php echo $val[0]; ?></textarea>
+                                <textarea name="review" cols="50" rows="3"><?php echo htmlspecialchars($val[0]); ?></textarea>
                             </label>
                             <p>
                                 <button type="submit">Edit</button>

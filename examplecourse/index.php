@@ -56,10 +56,9 @@
                 
                 foreach ($js as $key => $val) {
                     foreach ($val as $nkey => $review) {
-                        echo "<hr>" . $review ;
+                        echo "<hr>" . htmlspecialchars($review) ;
                     }
                 }
-                print $code;
 
                 /*
                 $db = new SQLite3('../CourseReviews.db');

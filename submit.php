@@ -42,7 +42,7 @@
                 $result = $stmt->execute();
                 if (!$row = $result->fetchArray()) {
                     print "<p>But are you sure this course ($course) exists? If it does contact me: lteufelbe@ethz.ch <br> I didn't save it. But here you can copy your text again:</p> <br>";
-                    echo $_POST["review"];
+                    echo htmlspecialchars($_POST["review"]);
                     $db->close();
                     exit();
                 }
@@ -73,12 +73,12 @@
                 // handle curl error
                 if ($code != 200) {
                     print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:</p> <br>";
-                    echo $_POST["review"];
+                    echo htmlspecialchars($_POST["review"]);
                 } else {
                     print "We will verify your review to make sure it isn't attacking anyones honour.<br>";
-                    echo $_POST["course"];
+                    echo htmlspecialchars($_POST["course"]);
                     print "<br>";
-                    echo $_POST["review"];
+                    echo htmlspecialchars($_POST["review"]);
                 }
                 ?>
         </div>
