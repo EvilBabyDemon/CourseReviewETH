@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src https:">
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
@@ -78,7 +79,7 @@
                         print "This course review doesn't exist in my database. Not sure where the problem lies. Maybe contact me if you think this is an error on my side. Here you can copy your text again as I did not save it:</p> <br>";
                         echo htmlspecialchars($_POST["review"]);
                     } else {
-                        echo "<br><b>Entry updated</b>";
+                        echo "<br><b>Entry updated!</b> ";
                         if ("" == trim($_POST['review'])) {
                             print "<br>Review of " . htmlspecialchars($_POST["course"]) . " got removed.";
                         } else {

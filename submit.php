@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src https:">
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
@@ -30,63 +31,62 @@
         <div id="columnA">
             <p><b>Thx for your submission!</b></p>
 
-                <?php
-                //check DB if Course exists
+            <?php
+            //check DB if Course exists
 
-                $course = substr($_POST["course"], 0, strpos($_POST["course"], " "));
+            $course = substr($_POST["course"], 0, strpos($_POST["course"], " "));
 
-                $db = new SQLite3('CourseReviews.db');
+            $db = new SQLite3('CourseReviews.db');
 
-                $stmt = $db->prepare("SELECT * FROM COURSES WHERE COURSE=:course");
-                $stmt->bindParam(':course', $course, SQLITE3_TEXT);
-                $result = $stmt->execute();
-                if (!$row = $result->fetchArray()) {
-                    print "<p>But are you sure this course ($course) exists? If it does, contact me: lteufelbe@ethz.ch <br> I didn't save it. But here you can copy your text again:</p> <br>";
-                    echo htmlspecialchars($_POST["review"]);
-                    $db->close();
-                    exit();
-                }
+            $stmt = $db->prepare("SELECT * FROM COURSES WHERE COURSE=:course");
+            $stmt->bindParam(':course', $course, SQLITE3_TEXT);
+            $result = $stmt->execute();
+            if (!$row = $result->fetchArray()) {
+                print "<p>But are you sure this course ($course) exists? If it does, contact me: lteufelbe@ethz.ch <br> I didn't save it. But here you can copy your text again:</p> <br>";
+                echo htmlspecialchars($_POST["review"]);
                 $db->close();
+                exit();
+            }
+            $db->close();
 
-                $data = array(
-                    'course_id' => $course,
-                    'nethz' => $val,
-                    'review' => $_POST["review"],
-                );
-                $ducky = "https://rubberducky.vsos.ethz.ch:1855/insert?";
-                $ducky = $ducky . http_build_query($data);
+            $data = array(
+                'course_id' => $course,
+                'nethz' => $val,
+                'review' => $_POST["review"],
+            );
+            $ducky = "https://rubberducky.vsos.ethz.ch:1855/insert?";
+            $ducky = $ducky . http_build_query($data);
 
-                $ch = curl_init($ducky);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+            $ch = curl_init($ducky);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+            curl_setopt($ch, CURLOPT_POST, true);
+            curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
-                // Set HTTP Header for POST request
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+            // Set HTTP Header for POST request
+            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 
-                $result = curl_exec($ch);
-                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                // Close cURL session handle
-                curl_close($ch);
-                // handle curl error
-                if ($code != 200) {
-                    print "Error Code: $code <br>";
-                    print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:<br>";
-                    echo htmlspecialchars($_POST["review"]);
-                    
+            $result = curl_exec($ch);
+            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            // Close cURL session handle
+            curl_close($ch);
+            // handle curl error
+            if ($code != 200) {
+                print "Error Code: $code <br>";
+                print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:<br>";
+                echo htmlspecialchars($_POST["review"]);
+            } else {
+                if ($result == '"inserted"') {
+                    print "<p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
                 } else {
-                    if($result == '"inserted"'){
-                        print "<p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
-                    } else {
-                        print 'You already inserted a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
-                    }
-                    echo htmlspecialchars($_POST["course"]);
-                    print "<br>";
-                    echo htmlspecialchars($_POST["review"]);
+                    print 'You already inserted a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
                 }
-                ?>
+                echo htmlspecialchars($_POST["course"]);
+                print "<br>";
+                echo htmlspecialchars($_POST["review"]);
+            }
+            ?>
         </div>
     </div>
 

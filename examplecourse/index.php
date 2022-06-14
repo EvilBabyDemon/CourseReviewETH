@@ -2,7 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src https:">
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
@@ -53,7 +54,7 @@
 
                 $js = json_decode($result, false);
                 $js = json_decode($js, false);
-                
+
                 foreach ($js as $key => $val) {
                     foreach ($val as $nkey => $review) {
                         echo "<hr>" . htmlspecialchars($review);
