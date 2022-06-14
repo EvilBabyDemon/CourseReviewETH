@@ -78,15 +78,16 @@
                         print "This course review doesn't exist in my database. Not sure where the problem lies. Maybe contact me if you think this is an error on my side. Here you can copy your text again as I did not save it:</p> <br>";
                         echo htmlspecialchars($_POST["review"]);
                     } else {
-                        echo "<br><b>Entry updated</b> It must be verified again, before it will show up. Give it some time.<br>";
+                        echo "<br><b>Entry updated</b>";
                         if ("" == trim($_POST['review'])) {
-                            print "Review of " . htmlspecialchars($_POST["course"]) . " got removed.";
+                            print "<br>Review of " . htmlspecialchars($_POST["course"]) . " got removed.";
                         } else {
+                            echo "It must be verified again, before it will show up. Give it some time.<br>";
                             echo htmlspecialchars($_POST["course"]);
                             print "<br>";
                             echo htmlspecialchars($_POST["review"]);
-                            print "<br>";
                         }
+                        print "<br>";
                     }
                 }
             }
