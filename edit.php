@@ -122,7 +122,7 @@
                     if ($val[2] == 0) {
                         echo "<b>Not yet verified!</b><br>";
                     } elseif ($val[2] == -1) {
-                        echo "<div style='color:red;'>Review was rejected! Edit it and remove anything thats attacking a person or anything else that might have gotten it rejected.</div><br>";
+                        echo "<div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>";
                     }
 
                     echo htmlspecialchars("$val[1] $rowc[0]");
