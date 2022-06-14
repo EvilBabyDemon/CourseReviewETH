@@ -53,7 +53,6 @@
                     'nethz' => $val,
                     'review' => $_POST["review"],
                 );
-                $post_data = json_encode($data);
                 $ducky = "https://rubberducky.vsos.ethz.ch:1855/insert?";
                 $ducky = $ducky . http_build_query($data);
 
@@ -61,7 +60,6 @@
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                 curl_setopt($ch, CURLOPT_POST, true);
-                //curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
                 curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
@@ -77,8 +75,7 @@
                     print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:</p> <br>";
                     echo $_POST["review"];
                 } else {
-
-                    print $result;
+                    print "We will verify your review to make sure it isn't attacking anyones honour.<br>";
                     echo $_POST["course"];
                     print "<br>";
                     echo $_POST["review"];
