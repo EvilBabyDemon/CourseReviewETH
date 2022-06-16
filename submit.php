@@ -42,7 +42,7 @@
             $stmt->bindParam(':course', $course, SQLITE3_TEXT);
             $result = $stmt->execute();
             if (!$row = $result->fetchArray()) {
-                print "<p>But are you sure this course ($course) exists? If it does, contact me: lteufelbe@ethz.ch <br> I didn't save it. But here you can copy your text again:</p> <br>";
+                print "<p>But are you sure this course (" . htmlspecialchars($course) . ") exists? If it does, contact me: lteufelbe@ethz.ch <br> I didn't save it. But here you can copy your text again:</p> <br>";
                 echo htmlspecialchars($_POST["review"]);
                 $db->close();
                 exit();
