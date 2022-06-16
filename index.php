@@ -18,6 +18,8 @@
 
         if ($result->fetchArray()) {
             echo "<meta http-equiv=\"Refresh\" content=\"0; url='https://n.ethz.ch/~lteufelbe/coursereview/$course/'\" />)";
+            $db->close();
+            exit();
         }
         $db->close();
     }
@@ -78,7 +80,7 @@
                 <input type="submit" value="Submit">
             </form>
 
-            <h2>Welcome <?php echo "$name $surname"; ?>!</h2>
+            <h2>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h2>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
