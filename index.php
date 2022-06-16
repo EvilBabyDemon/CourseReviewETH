@@ -28,6 +28,8 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 
         if ($result->fetchArray()) {
             echo "<meta http-equiv=\"Refresh\" content=\"0; url='https://n.ethz.ch/~$nethz/coursereview/$course/'\" />)";
+            $db->close();
+            exit();
         }
         $db->close();
     }
@@ -88,7 +90,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
                 <input type="submit" value="Submit">
             </form>
 
-            <h2>Welcome <?php echo "$name $surname"; ?>!</h2>
+            <h2>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h2>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
             <a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/add.php">Add a review!</a> <br>
             <a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/edit.php">Edit your existent reviews!</a> <br>
