@@ -36,8 +36,8 @@ $token = file_get_contents("secret/key.txt");
 
             <?php
             //check DB if Course exists
-
-            $course = substr($_POST["course"], 0, strpos($_POST["course"], " "));
+            $course = $_POST["course"] . " ";
+            $course = substr($course, 0, strpos($course, " "));
 
             $db = new SQLite3('CourseReviews.db');
 
