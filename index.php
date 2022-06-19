@@ -1,5 +1,5 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -9,7 +9,8 @@
     <link href="../default.css" rel="stylesheet" type="text/css" />
     <?php
     if (isset($_POST["course"])) {
-        $course = substr($_POST["course"], 0, strpos($_POST["course"], " "));
+        $course = $_POST["course"] . " ";
+        $course = substr($course, 0, strpos($course, " "));
         $db = new SQLite3('CourseReviews.db');
         $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
         $stmt->bindParam(':course', $course, SQLITE3_TEXT);
@@ -81,8 +82,6 @@
             <p>Here you can add and read reviews of courses from ETHZ!</p>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
-            </p>
-
         </div>
         <div id="footer">
             <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:lteufelbe@ethz.ch">lteufelbe@ethz.ch</a></p>
