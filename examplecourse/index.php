@@ -56,7 +56,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 
                 $empty = true;
                 while ($row = $result->fetchArray()) {
-                    echo "<hr" . htmlspecialchars($row[2]);
+                    echo "<hr>" . nl2br(htmlspecialchars($row[2]));
                     $empty = false;
                 }
 
