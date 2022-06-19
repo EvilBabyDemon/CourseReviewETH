@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+$token = file_get_contents("secret/key.txt");
+?>
 
 <head>
     <meta charset="utf-8">
@@ -47,7 +50,7 @@
                 curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
                 // Set HTTP Header for POST request
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . $token));
 
                 //Edit entry
                 if ("" == trim($_POST['review'])) {
@@ -95,55 +98,70 @@
             ?>
 
             <?php
-            $ducky = "https://rubberducky.vsos.ethz.ch:1855/user/";
-            $ducky = $ducky . $val;
-            $ch = curl_init();
-            curl_setopt($ch, CURLOPT_URL, $ducky);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+            function getUserReviews(String $val, String $token)
+            {
+                $ducky = "https://rubberducky.vsos.ethz.ch:1855/user/";
+                $ducky = $ducky . $val;
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $ducky);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
 
-            $result = curl_exec($ch);
-            $info = curl_getinfo($ch);
-            curl_close($ch);
-
-            if (strlen($result) == 2) {
-                echo "You didn't submit anything yet.";
-            } else {
-
-                $js = json_decode($result, false);
-
-                foreach ($js as $key => $val) {
-                    $dbc = new SQLite3('CourseReviews.db');
-                    $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
-                    $stmtc->bindParam(':course', $val[1], SQLITE3_TEXT);
-                    $resultc = $stmtc->execute();
-                    $rowc = $resultc->fetchArray();
-
-                    echo "<hr>";
-                    if ($val[2] == 0) {
-                        echo "<b>Not yet verified!</b><br>";
-                    } elseif ($val[2] == -1) {
-                        echo "<div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>";
-                    }
-
-                    echo htmlspecialchars("$val[1] $rowc[0]");
-            ?>
-                    <form method="post" action="edit.php">
-                        <fieldset>
-                            <legend>Review</legend>
-                            <label>
-                                <input style="color:red" name="course" size="10" value="<?php echo htmlspecialchars($val[1]); ?>" readonly>
-                                <br>
-                                <textarea name="review" cols="50" rows="3"><?php echo htmlspecialchars($val[0]); ?></textarea>
-                            </label>
-                            <p>
-                                <button type="submit">Edit</button>
-                            </p>
-                        </fieldset>
-                    </form>
-            <?php
+                $result = curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if ($code == 401) {
+                    return true;
                 }
+
+                if (strlen($result) == 2) {
+                    echo "You didn't submit anything yet.";
+                } else {
+
+                    $js = json_decode($result, false);
+
+                    foreach ($js as $key => $val) {
+                        $dbc = new SQLite3('CourseReviews.db');
+                        $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
+                        $stmtc->bindParam(':course', $val[1], SQLITE3_TEXT);
+                        $resultc = $stmtc->execute();
+                        $rowc = $resultc->fetchArray();
+
+                        echo "<hr>";
+                        if ($val[2] == 0) {
+                            echo "<b>Not yet verified!</b><br>";
+                        } elseif ($val[2] == -1) {
+                            echo "<div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>";
+                        }
+
+                        echo htmlspecialchars("$val[1] $rowc[0]");
+            ?>
+                        <form method="post" action="edit.php">
+                            <fieldset>
+                                <legend>Review</legend>
+                                <label>
+                                    <input style="color:red" name="course" size="10" value="<?php echo htmlspecialchars($val[1]); ?>" readonly>
+                                    <br>
+                                    <textarea name="review" cols="50" rows="3"><?php echo htmlspecialchars($val[0]); ?></textarea>
+                                </label>
+                                <p>
+                                    <button type="submit">Edit</button>
+                                </p>
+                            </fieldset>
+                        </form>
+            <?php
+                    }
+                }
+                return false;
             }
+            if (getUserReviews($val, $token)) {
+                //get new token
+                require_once('newToken.php');
+                $token = newToken();
+                getUserReviews($val, $token);
+            }
+
             ?>
 
         </div>

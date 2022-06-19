@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+$token = file_get_contents("secret/key.txt");
+?>
 
 <head>
     <meta charset="utf-8">
@@ -56,35 +59,49 @@
             );
             $ducky = "https://rubberducky.vsos.ethz.ch:1855/insert?";
             $ducky = $ducky . http_build_query($data);
+            function submitReview(String $ducky, String $token)
+            {
+                $ch = curl_init($ducky);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
-            $ch = curl_init($ducky);
-            curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-            curl_setopt($ch, CURLOPT_POST, true);
-            curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-            curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+                // Set HTTP Header for POST request
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . $token));
 
-            // Set HTTP Header for POST request
-            curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+                $result = curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                // Close cURL session handle
+                curl_close($ch);
 
-            $result = curl_exec($ch);
-            $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-            // Close cURL session handle
-            curl_close($ch);
-            // handle curl error
-            if ($code != 200) {
-                print "Error Code: $code <br>";
-                print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:<br>";
-                echo htmlspecialchars($_POST["review"]);
-            } else {
-                if ($result == '"inserted"') {
-                    print "<p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
-                } else {
-                    print 'You already inserted a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
+                if ($code == 401) {
+                    return true;
                 }
-                echo htmlspecialchars($_POST["course"]);
-                print "<br>";
-                echo htmlspecialchars($_POST["review"]);
+                // handle curl error
+                if ($code != 200) {
+                    print "Error Code: $code <br>";
+                    print "Something went wrong I am sorry. Here you can copy your text again as I did not save it:<br>";
+                    echo htmlspecialchars($_POST["review"]);
+                } else {
+                    if ($result == '"inserted"') {
+                        print "<p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
+                    } else {
+                        print 'You already inserted a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
+                    }
+                    echo htmlspecialchars($_POST["course"]);
+                    print "<br>";
+                    echo htmlspecialchars($_POST["review"]);
+                }
+                return false;
+            }
+
+            if (submitReview($val, $token)) {
+                //get new token
+                require_once('newToken.php');
+                $token = newToken();
+                submitReview($val, $token);
             }
             ?>
         </div>

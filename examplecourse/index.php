@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
+<?php
+$token = file_get_contents("../secret/key.txt");
+?>
 
 <head>
     <meta charset="utf-8">
@@ -40,45 +43,38 @@
                 print "<b>$url $course[0]</b><br>";
                 $db->close();
 
-                $ducky = "https://rubberducky.vsos.ethz.ch:1855/course/";
-                $ducky = $ducky . $url;
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $ducky);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_CAINFO, "../cacert-2022-04-26.pem");
+                function getReviews(String $url, String $token)
+                {
+                    $ducky = "https://rubberducky.vsos.ethz.ch:1855/course/";
+                    $ducky = $ducky . $url;
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $ducky);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_CAINFO, "../cacert-2022-04-26.pem");
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
 
-                $result = curl_exec($ch);
-                $info = curl_getinfo($ch);
-                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch);
-
-                $js = json_decode($result, false);
-                $js = json_decode($js, false);
-
-                foreach ($js as $key => $val) {
-                    foreach ($val as $nkey => $review) {
-                        echo "<hr>" . htmlspecialchars($review);
+                    $result = curl_exec($ch);
+                    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    curl_close($ch);
+                    if ($code == 401) {
+                        return true;
                     }
-                }
+                    $js = json_decode($result, false);
+                    $js = json_decode($js, false);
 
-                /*
-                $db = new SQLite3('../CourseReviews.db');
-                $stmt = $db->prepare("SELECT * FROM REVIEWS WHERE COURSE=:course");
-                $stmt->bindParam(':course', $url, SQLITE3_TEXT);
-                $result = $stmt->execute();
-
-                $empty = true;
-                while ($row = $result->fetchArray()) {
-                    print $row[2];
-                    print "<hr>";
-                    $empty = false;
+                    foreach ($js as $key => $val) {
+                        foreach ($val as $nkey => $review) {
+                            echo "<hr>" . htmlspecialchars($review);
+                        }
+                    }
+                    return false;
                 }
-
-                if ($empty) {
-                    echo 'There is no review here yet, please add one if you visited the course already!';
+                if (getReviews($url, $token)) {
+                    //get new token
+                    require_once('../newToken.php');
+                    $token = newToken();
+                    getReviews($url, $token);
                 }
-                $db->close();
-                */
             } else {
                 echo 'This is no course nor does this page exist. So here you have an error code: <b>404</b>';
             }
