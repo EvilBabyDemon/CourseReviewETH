@@ -52,13 +52,6 @@ $token = file_get_contents("secret/key.txt");
             }
             $db->close();
 
-            $data = array(
-                'course_id' => $course,
-                'nethz' => $val,
-                'review' => $_POST["review"],
-            );
-            $ducky = "https://rubberducky.vsos.ethz.ch:1855/insert?";
-            $ducky = $ducky . http_build_query($data);
             function submitReview(String $ducky, String $token)
             {
                 $ch = curl_init($ducky);
@@ -96,12 +89,18 @@ $token = file_get_contents("secret/key.txt");
                 }
                 return false;
             }
-
-            if (submitReview($val, $token)) {
+            $data = array(
+                'course_id' => $course,
+                'nethz' => $val,
+                'review' => $_POST["review"],
+            );
+            $ducky = "https://rubberducky.vsos.ethz.ch:1855/insert?";
+            $ducky = $ducky . http_build_query($data);
+            if (submitReview($ducky, $token)) {
                 //get new token
                 require_once('newToken.php');
                 $token = newToken();
-                submitReview($val, $token);
+                submitReview($ducky, $token);
             }
             ?>
         </div>
