@@ -64,7 +64,7 @@ $token = file_get_contents("../secret/key.txt");
 
                     foreach ($js as $key => $val) {
                         foreach ($val as $nkey => $review) {
-                            echo "<hr>" . htmlspecialchars($review);
+                            echo "<hr>" . nl2br(htmlspecialchars($review));
                         }
                     }
                     return false;
