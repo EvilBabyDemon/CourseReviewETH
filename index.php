@@ -141,6 +141,7 @@ $token = file_get_contents("secret/key.txt");
         </div>
         <div id="footer">
             <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:lteufelbe@ethz.ch">lteufelbe@ethz.ch</a></p>
+            The code is also open source: <a href="https://github.com/EvilBabyDemon/CourseReviewETH">https://github.com/EvilBabyDemon/CourseReviewETH</a>
         </div>
     </div>
 </body>
