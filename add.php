@@ -15,13 +15,7 @@
         <h1>CourseReview</h1>
         <h2>&nbsp;</h2>
     </div>
-    <div id="menu">
-        <ul>
-            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
-            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
-            <li><a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
-        </ul>
-    </div>
+    <?php include 'includes/menu.php' ?>
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
@@ -67,10 +61,7 @@
 
         </div>
     </div>
-    <div id="footer">
-        <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:lteufelbe@ethz.ch">lteufelbe@ethz.ch</a></p>
-    </div>
-
+    
+    <?php include 'includes/footer.php'; ?>
 </body>
-
 </html>
