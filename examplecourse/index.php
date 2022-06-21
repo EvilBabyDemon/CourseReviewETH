@@ -7,10 +7,11 @@ $token = file_get_contents("../secret/key.txt");
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
+    <meta name="viewport" content="width=device-width">
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="/~lteufelbe/default.css" rel="stylesheet" type="text/css" />
+    <link href="../main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>

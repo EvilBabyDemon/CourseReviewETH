@@ -36,7 +36,7 @@ $token = file_get_contents("secret/key.txt");
     <div id="header">
         <h1><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></h1>
     </div>
-    <?php include 'includes/menu.php' ?>
+    <?php include 'includes/menu.php' ?> 
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];

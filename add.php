@@ -5,9 +5,10 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>Review</title>
+    <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="../default.css" rel="stylesheet" type="text/css" />
+    <link href="main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
