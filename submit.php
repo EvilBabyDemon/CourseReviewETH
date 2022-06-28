@@ -2,6 +2,7 @@
 <html lang="en">
 <?php
 $token = file_get_contents("secret/key.txt");
+$api = file_get_contents("secret/api.txt");
 ?>
 
 <head>
@@ -15,10 +16,6 @@ $token = file_get_contents("secret/key.txt");
 </head>
 
 <body>
-    <div id="header">
-        <h1>CourseReview</h1>
-        <h2>&nbsp;</h2>
-    </div>
     <?php include 'includes/menu.php' ?>
     <?php
     $surname = $_SERVER["surname"];
@@ -89,7 +86,7 @@ $token = file_get_contents("secret/key.txt");
                 'nethz' => $val,
                 'review' => $_POST["review"],
             );
-            $ducky = "https://rubberducky.vsos.ethz.ch:1855/insert?";
+            $ducky = $api . "insert?";
             $ducky = $ducky . http_build_query($data);
             if (submitReview($ducky, $token)) {
                 //get new token

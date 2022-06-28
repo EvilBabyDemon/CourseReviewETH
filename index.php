@@ -11,7 +11,7 @@ $token = file_get_contents("secret/key.txt");
     <title>CourseReview</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="../main.css" rel="stylesheet" type="text/css" />
+    <link href="main.css" rel="stylesheet" type="text/css" />
     <?php
     if (isset($_POST["course"])) {
         $course = $_POST["course"] . " ";
@@ -33,9 +33,6 @@ $token = file_get_contents("secret/key.txt");
 </head>
 
 <body>
-    <div id="header">
-        <h1><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></h1>
-    </div>
     <?php include 'includes/menu.php' ?> 
     <?php
     $surname = $_SERVER["surname"];
@@ -47,20 +44,26 @@ $token = file_get_contents("secret/key.txt");
             <?php
             if (isset($_POST["course"])) {
                 $db = new SQLite3('CourseReviews.db');
-                $stmt = $db->prepare("SELECT * FROM SEARCH WHERE SEARCH MATCH ':input' ORDER BY rank limit 10;");
+                $stmt = $db->prepare("SELECT * FROM COURSES WHERE NAME Like '%' || REPLACE(:input, ' ', '%') || '%' limit 10;");
                 $stmt->bindParam(':input', $_POST["course"], SQLITE3_TEXT);
                 $result = $stmt->execute();
-                echo "Your search didn't find an exact result, so here are the closest: <br>";
+                ?>
+                Your search didn't find an exact result, so here are the closest ones: <br>
+                <ol>
+                <?php
                 while ($row = $result->fetchArray()) {
             ?>
-                    <a href="<?php echo "https://n.ethz.ch/~lteufelbe/coursereview/$row[0]/"; ?>"><?php echo "$row[0] $row[1]"; ?></a><br>
+                    <li><a href="<?php echo "https://n.ethz.ch/~lteufelbe/coursereview/" . htmlspecialchars($row[0]) . "/"; ?>"><?php echo htmlspecialchars($row[0]) . " <b>" . htmlspecialchars($row[1]) . "</b>"; ?></a></li>
             <?php
                 }
                 $db->close();
+            ?>
+                </ol>
+            <?php    
             }
             ?>
             <form method="post" action="#">
-                <input list="courses" id="course" name="course" placeholder="Search for Reviews" size="40">
+                <input id="search" list="courses" name="course" placeholder="Search for Reviews">
                 <datalist id="courses">
                     <?php
                     $db = new SQLite3('CourseReviews.db');
@@ -75,10 +78,10 @@ $token = file_get_contents("secret/key.txt");
                     $db->close();
                         ?>
                 </datalist>
-                <input type="submit" value="Submit">
+                <input id="searchbutton" type="submit" value="Search">
             </form>
 
-            <h2>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h2>
+            <h3>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h3>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
@@ -105,18 +108,19 @@ $token = file_get_contents("secret/key.txt");
                 <ul>
                     <?php
                     foreach($js as $value){
-                        $fullname = $value->CourseNumber;
+                        $coursename = "";
                         $db = new SQLite3('CourseReviews.db');
                         $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
                         $stmt->bindParam(':course', $value->CourseNumber, SQLITE3_TEXT);
                         $qresult = $stmt->execute();
                         
                         if ($row = $qresult->fetchArray()) {
-                            $fullname = $value->CourseNumber  . " ". $row[0];
+                            $coursename = $row[0];
                         }
                         $db->close();
 
-                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/' . htmlspecialchars($value->CourseNumber) . '/">' . htmlspecialchars("$fullname") . '</a></li>';
+                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/' . htmlspecialchars($value->CourseNumber) . '/">' . 
+                        htmlspecialchars($value->CourseNumber) . ' <b>' . htmlspecialchars($coursename) . '</b></a></li>';
                     }
                     ?>
                 </ul>

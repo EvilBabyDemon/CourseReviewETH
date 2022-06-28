@@ -15,10 +15,6 @@ $token = file_get_contents("secret/key.txt");
 </head>
 
 <body>
-    <div id="header">
-        <h1>CourseReview</h1>
-        <h2>&nbsp;</h2>
-    </div>
     <?php include 'includes/menu.php' ?>
     <?php
     $surname = $_SERVER["surname"];
@@ -29,7 +25,7 @@ $token = file_get_contents("secret/key.txt");
         <div id="columnA">
 
             <b>Here will you be able to edit your Reviews.</b><br>
-            Just change the text in the fields and press on the button. Submitting a blank review will delete it.<br>
+            <p>Just change the text in the fields and press on the button. Submitting a blank review will delete it.</p>
 
             <?php
             if (isset($_POST["course"])) {
@@ -123,22 +119,21 @@ $token = file_get_contents("secret/key.txt");
                         $resultc = $stmtc->execute();
                         $rowc = $resultc->fetchArray();
 
-                        echo "<hr>";
+                        echo "<br>";
                         if ($val[2] == 0) {
                             echo "<b>Not yet verified!</b><br>";
                         } elseif ($val[2] == -1) {
                             echo "<div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>";
                         }
 
-                        echo htmlspecialchars("$val[1] $rowc[0]");
             ?>
                         <form method="post" action="edit.php">
                             <fieldset>
-                                <legend>Review</legend>
+                                <legend><?php echo htmlspecialchars("$rowc[0]"); ?></legend>
                                 <label>
-                                    <input style="color:red" name="course" size="10" value="<?php echo htmlspecialchars($val[1]); ?>" readonly>
+                                    <input style="color:red" name="course" value="<?php echo htmlspecialchars($val[1]); ?>" readonly>
                                     <br>
-                                    <textarea name="review" cols="50" rows="3"><?php echo htmlspecialchars($val[0]); ?></textarea>
+                                    <textarea name="review" rows="4"><?php echo htmlspecialchars($val[0]); ?></textarea>
                                 </label>
                                 <p>
                                     <button type="submit">Edit</button>

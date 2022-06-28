@@ -1,5 +1,8 @@
+<div id="header">
+    <h1><a href="https://n.ethz.ch/~lteufelbe/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></h1>
+</div>
 <div id="menu">
-    <a class="button" href="https://n.ethz.ch/~lteufelbe/coursereview/add.php" onFocus="if(this.blur)this.blur()">
+    <a class="button" href="https://n.ethz.ch/~lteufelbe/coursereview/add.php<?php echo $course_url; ?>" onFocus="if(this.blur)this.blur()">
         <svg xmlns="http://www.w3.org/2000/svg" class="button-icon" viewBox="0 0 20 20" fill="currentColor">
             <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd" />
         </svg>

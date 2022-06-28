@@ -40,6 +40,11 @@ select {
     font: inherit;
 }
 
+textarea,
+select {
+    width: 100%;
+}
+
 p,
 h1,
 h2,
@@ -140,4 +145,18 @@ a {
     padding: 15px 20px;
     font-size: smaller;
     background-color: #BDBDBD;
+}
+
+.box {
+    padding: 10px;
+    border: 2px solid darkgray;
+    margin: 0px;
+}
+#search {
+    width: 72%;
+}
+
+#searchbutton {
+    width: 25%;
+    float: right;
 }
