@@ -15,10 +15,10 @@ Needs to be used with own https://n.ethz.ch/~user/ Website to have switch aai au
 
 The DB needs to be populated with all the courses, every new Semester this should also be updated.
 
-ssh nethz@slab1.ethz.ch
-*enter ldap pwd*
-cd homepage
-git clone https://github.com/EvilBabyDemon/CourseReviewETH
-mv CourseReviewETH coursereview
+ssh nethz@slab1.ethz.ch  
+*enter ldap pwd*  
+cd homepage  
+git clone https://github.com/EvilBabyDemon/CourseReviewETH  
+mv CourseReviewETH coursereview  
 
 These are the only commands to set everything up.
