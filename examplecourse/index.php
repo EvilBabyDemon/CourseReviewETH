@@ -30,7 +30,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
     $result = $stmt->execute();
     $course = $result->fetchArray();
     $course_url = "";
-    if($course){
+    if ($course) {
         $course_url = "?course=" . $url;
     }
 
@@ -40,7 +40,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
         <div id="columnA">
 
             <?php
-            if($course){
+            if ($course) {
                 print "<b>$url $course[0]</b><br>";
                 $db->close();
 
@@ -60,14 +60,14 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     if ($code == 401) {
                         return true;
                     }
-                    
+
                     $js = json_decode($result, false);
                     $js = json_decode($js, false);
-                    
-                    if(sizeof($js) == 0) {
+
+                    if (sizeof($js) == 0) {
                         echo "There is nothing here yet. Would be nice if you add a review if you took this course.";
                     }
-                    
+
                     foreach ($js as $key => $val) {
                         foreach ($val as $nkey => $review) {
                             echo "<br> <div class=\"box\">" . nl2br(htmlspecialchars($review)) . "</div>";

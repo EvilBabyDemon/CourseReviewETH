@@ -159,4 +159,5 @@ $api = trim(file_get_contents("secret/api.txt"));
     </div>
     <?php include 'includes/footer.php'; ?>
 </body>
+
 </html>
