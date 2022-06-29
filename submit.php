@@ -2,7 +2,7 @@
 <html lang="en">
 <?php
 $token = file_get_contents("secret/key.txt");
-$api = file_get_contents("secret/api.txt");
+$api = trim(file_get_contents("secret/api.txt"));
 ?>
 
 <head>

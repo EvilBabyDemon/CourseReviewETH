@@ -2,6 +2,7 @@
 <html lang="en">
 <?php
 $token = file_get_contents("secret/key.txt");
+$api = trim(file_get_contents("secret/api.txt"));
 ?>
 
 <head>
@@ -87,9 +88,9 @@ $token = file_get_contents("secret/key.txt");
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
 
             <?php
-            function getLatest(String $token)
+            function getLatest(String $token, String $api)
             {
-                $ducky = "https://rubberducky.vsos.ethz.ch:1855/latest";
+                $ducky = $api . "latest";
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $ducky);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -128,11 +129,11 @@ $token = file_get_contents("secret/key.txt");
                 return false;
             }
             
-            if (getLatest($token)) {
+            if (getLatest($token, $api)) {
                 //get new token
                 require_once('newToken.php');
                 $token = newToken();
-                getLatest($token);
+                getLatest($token, $api);
             }
             
             ?>

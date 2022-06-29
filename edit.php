@@ -2,6 +2,7 @@
 <html lang="en">
 <?php
 $token = file_get_contents("secret/key.txt");
+$api = trim(file_get_contents("secret/api.txt"));
 ?>
 
 <head>
@@ -32,7 +33,7 @@ $token = file_get_contents("secret/key.txt");
 
                 //change this to fit
 
-                $ducky = "https://rubberducky.vsos.ethz.ch:1855/";
+                $ducky = $api;
 
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -89,9 +90,9 @@ $token = file_get_contents("secret/key.txt");
             ?>
 
             <?php
-            function getUserReviews(String $val, String $token)
+            function getUserReviews(String $val, String $token, String $api)
             {
-                $ducky = "https://rubberducky.vsos.ethz.ch:1855/user/";
+                $ducky = $api . "user/";
                 $ducky = $ducky . $val;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $ducky);
@@ -145,11 +146,11 @@ $token = file_get_contents("secret/key.txt");
                 }
                 return false;
             }
-            if (getUserReviews($val, $token)) {
+            if (getUserReviews($val, $token, $api)) {
                 //get new token
                 require_once('newToken.php');
                 $token = newToken();
-                getUserReviews($val, $token);
+                getUserReviews($val, $token, $api);
             }
 
             ?>

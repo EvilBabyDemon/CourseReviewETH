@@ -1,6 +1,6 @@
 <?php
 function newToken() {
-    $ducky = "https://rubberducky.vsos.ethz.ch:1855/token";
+    $ducky = trim(file_get_contents("secret/api.txt"));
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
