@@ -14,10 +14,11 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
+    <meta name="viewport" content="width=device-width">
     <title>CourseReview</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="../default.css" rel="stylesheet" type="text/css" />
+    <link href="main.css" rel="stylesheet" type="text/css" />
     <?php
     if (isset($_POST["course"])) {
         $course = $_POST["course"] . " ";
@@ -28,7 +29,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
         $result = $stmt->execute();
 
         if ($result->fetchArray()) {
-            echo "<meta http-equiv=\"Refresh\" content=\"0; url='https://n.ethz.ch/~$nethz/coursereview/$course/'\" />)";
+            echo "<meta http-equiv=\"Refresh\" content=\"0; url='https://n.ethz.ch/~" . htmlspecialchars($nethz) . "/coursereview/" . htmlspecialchars($course) . "/'\" />)";
             $db->close();
             exit();
         }
@@ -39,17 +40,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 </head>
 
 <body>
-    <div id="header">
-        <h1>CourseReview</h1>
-        <h2>&nbsp;</h2>
-    </div>
-    <div id="menu">
-        <ul>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
-        </ul>
-    </div>
+    <?php include 'includes/menu.php' ?>
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
@@ -66,7 +57,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
                 echo "Your search didn't find an exact result, so here are the closest: <br>";
                 while ($row = $result->fetchArray()) {
             ?>
-                    <a href="<?php echo "https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/$row[0]/"; ?>"><?php echo "$row[0] $row[1]"; ?></a><br>
+                    <a href="<?php echo "https://n.ethz.ch/~" . htmlspecialchars($nethz) . "/coursereview/" . htmlspecialchars($row[0]) . "/"; ?>"><?php echo htmlspecialchars("$row[0] $row[1]"); ?></a><br>
             <?php
                 }
                 $db->close();
@@ -82,7 +73,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 
                     while ($row = $result->fetchArray()) {
                     ?>
-                        <option value="<?php echo "$row[0] $row[1]"; ?>">
+                        <option value="<?php echo htmlspecialchars("$row[0] $row[1]"); ?>">
                         <?php
                     }
                     $db->close();
@@ -93,15 +84,13 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 
             <h2>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h2>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
-            <a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/add.php">Add a review!</a> <br>
-            <a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/edit.php">Edit your existent reviews!</a> <br>
+            <a href="https://n.ethz.ch/~<?php echo htmlspecialchars($nethz);?>/coursereview/add.php">Add a review!</a> <br>
+            <a href="https://n.ethz.ch/~<?php echo htmlspecialchars($nethz);?>/coursereview/edit.php">Edit your existent reviews!</a> <br>
             </p>
-
-        </div>
-        <div id="footer">
-            <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:<?php echo $nethz;?>@ethz.ch"><?php echo $nethz;?>@ethz.ch</a></p>
+            <!-- add latest 10 coursereviews here, sort by time of review entry in db -->
         </div>
     </div>
+    <?php include 'includes/footer.php'; ?>
 </body>
 
 </html>

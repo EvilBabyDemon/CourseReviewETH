@@ -15,23 +15,14 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>Review</title>
+    <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="../default.css" rel="stylesheet" type="text/css" />
+    <link href="main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <div id="header">
-        <h1>CourseReview</h1>
-        <h2>&nbsp;</h2>
-    </div>
-    <div id="menu">
-        <ul>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz; ?>/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz; ?>/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz; ?>/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
-        </ul>
-    </div>
+    <?php include 'includes/menu.php' ?>
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
@@ -41,7 +32,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
         <div id="columnA">
 
             <b>Here will you be able to edit your Reviews.</b><br>
-            Just change the text in the fields and press on the button. Submitting a blank review will delete it.<br>
+            <p>Just change the text in the fields and press on the button. Submitting a blank review will delete it.</p>
 
             <?php
             if (isset($_POST["course"])) {
@@ -88,9 +79,9 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
                     <fieldset>
                         <legend>Review</legend>
                         <label>
-                            <input style="color:red" name="course" size="10" value="<?php echo htmlspecialchars("$rowc[0]"); ?>" readonly>
+                            <input style="color:red" name="course" value="<?php echo htmlspecialchars("$rowc[0]"); ?>" readonly>
                             <br>
-                            <textarea name="review" cols="50" rows="3"><?php echo htmlspecialchars($row[2]); ?></textarea>
+                            <textarea name="review" rows="4"><?php echo htmlspecialchars($row[2]); ?></textarea>
                         </label>
                         <p>
                             <button type="submit">Edit</button>
@@ -110,10 +101,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 
         </div>
     </div>
-    <div id="footer">
-        <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:<?php echo $nethz; ?>@ethz.ch"><?php echo $nethz; ?>@ethz.ch</a></p>
-    </div>
-
+    <?php include 'includes/footer.php'; ?>
 </body>
 
 </html>

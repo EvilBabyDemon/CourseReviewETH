@@ -14,24 +14,15 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
+    <meta name="viewport" content="width=device-width">
     <title>Review</title>
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="/~<?php echo $nethz;?>/default.css" rel="stylesheet" type="text/css" />
+    <link href="../main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <div id="header">
-        <h1>CourseReview</h1>
-        <h2>&nbsp;</h2>
-    </div>
-    <div id="menu">
-        <ul>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/" onFocus="if(this.blur)this.blur()">CourseReview</a></li>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/add.php" onFocus="if(this.blur)this.blur()">Add</a></li>
-            <li><a href="https://n.ethz.ch/~<?php echo $nethz;?>/coursereview/edit.php" onFocus="if(this.blur)this.blur()">Edit</a></li>
-        </ul>
-    </div>
+    <?php include 'includes/menu.php' ?>
     <div id="content">
         <div id="columnA">
 
@@ -56,7 +47,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
 
                 $empty = true;
                 while ($row = $result->fetchArray()) {
-                    echo "<hr>" . nl2br(htmlspecialchars($row[2]));
+                    echo "<br> <div class=\"box\">" . nl2br(htmlspecialchars($row[2])) . "</div>";
                     $empty = false;
                 }
 
@@ -70,9 +61,7 @@ $nethz = substr($nethz, 0, strpos($nethz, "/"));
             ?>
 
         </div>
-        <div id="footer">
-            <p>If you think something is wrong or have any suggestion please contact me: <a href="mailto:<?php echo $nethz;?>@ethz.ch"><?php echo $nethz;?>@ethz.ch</a></p>
-        </div>
+        <?php include 'includes/footer.php'; ?>
     </div>
 </body>
 
