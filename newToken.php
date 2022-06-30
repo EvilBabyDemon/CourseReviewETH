@@ -1,6 +1,6 @@
 <?php
 function newToken() {
-    $ducky = trim(file_get_contents("secret/api.txt"));
+    $ducky = trim(file_get_contents("secret/api.txt")) . "token";
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
