@@ -88,6 +88,32 @@ $api = trim(file_get_contents("secret/api.txt"));
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
 
             <?php
+            function getStats(String $token, String $api) {
+                $ducky = $api . "stats/";
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $ducky);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
+                $result = curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if ($code == 401) {
+                    return true;
+                }
+                $js = json_decode(json_decode($result, true), true);
+                print "<b>" .  htmlspecialchars($js[0]['total']) . "</b> reviews for <b>" . htmlspecialchars($js[0]['percourse']) . "</b> courses have been published so far.";
+                return false;
+            }
+            if (getStats($token, $api)) {
+                //get new token
+                require_once('newToken.php');
+                $token = newToken();
+                getStats($token, $api);
+            }
+
+
+
             function getLatest(String $token, String $api)
             {
                 $ducky = $api . "latest";
