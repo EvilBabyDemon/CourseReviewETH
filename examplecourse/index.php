@@ -24,7 +24,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
     $url = substr($url, 0, strpos($url, "/"));
     $url = trim($url);
 
-    $db = new SQLite3('../CourseReviews.db');
+    $db = new SQLite3('../secret/CourseReviews.db');
     $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
     $stmt->bindParam(':course', $url, SQLITE3_TEXT);
     $result = $stmt->execute();

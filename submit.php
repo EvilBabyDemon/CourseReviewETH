@@ -31,7 +31,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             $course = $_POST["course"] . " ";
             $course = substr($course, 0, strpos($course, " "));
 
-            $db = new SQLite3('CourseReviews.db');
+            $db = new SQLite3('secret/CourseReviews.db');
 
             $stmt = $db->prepare("SELECT * FROM COURSES WHERE COURSE=:course");
             $stmt->bindParam(':course', $course, SQLITE3_TEXT);

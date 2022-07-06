@@ -32,7 +32,7 @@
                                                                                                                                                         } ?> required>
                         <datalist id="courses">
                             <?php
-                            $db = new SQLite3('CourseReviews.db');
+                            $db = new SQLite3('secret/CourseReviews.db');
                             $stmt = $db->prepare("SELECT * FROM COURSES");
                             $result = $stmt->execute();
 

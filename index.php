@@ -17,7 +17,7 @@ $api = trim(file_get_contents("secret/api.txt"));
     if (isset($_POST["course"])) {
         $course = $_POST["course"] . " ";
         $course = substr($course, 0, strpos($course, " "));
-        $db = new SQLite3('CourseReviews.db');
+        $db = new SQLite3('secret/CourseReviews.db');
         $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
         $stmt->bindParam(':course', $course, SQLITE3_TEXT);
         $result = $stmt->execute();
@@ -44,7 +44,7 @@ $api = trim(file_get_contents("secret/api.txt"));
         <div id="columnA">
             <?php
             if (isset($_POST["course"])) {
-                $db = new SQLite3('CourseReviews.db');
+                $db = new SQLite3('secret/CourseReviews.db');
                 $stmt = $db->prepare("SELECT * FROM COURSES WHERE NAME Like '%' || REPLACE(:input, ' ', '%') || '%' limit 10;");
                 $stmt->bindParam(':input', $_POST["course"], SQLITE3_TEXT);
                 $result = $stmt->execute();
@@ -67,7 +67,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                 <input id="search" list="courses" name="course" placeholder="Search for Reviews">
                 <datalist id="courses">
                     <?php
-                    $db = new SQLite3('CourseReviews.db');
+                    $db = new SQLite3('secret/CourseReviews.db');
                     $stmt = $db->prepare("SELECT * FROM COURSES;");
                     $result = $stmt->execute();
 
@@ -136,7 +136,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                     <?php
                     foreach ($js as $value) {
                         $coursename = "";
-                        $db = new SQLite3('CourseReviews.db');
+                        $db = new SQLite3('secret/CourseReviews.db');
                         $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
                         $stmt->bindParam(':course', $value->CourseNumber, SQLITE3_TEXT);
                         $qresult = $stmt->execute();

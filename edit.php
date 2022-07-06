@@ -114,7 +114,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                     $js = json_decode($result, false);
 
                     foreach ($js as $key => $val) {
-                        $dbc = new SQLite3('CourseReviews.db');
+                        $dbc = new SQLite3('secret/CourseReviews.db');
                         $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
                         $stmtc->bindParam(':course', $val[1], SQLITE3_TEXT);
                         $resultc = $stmtc->execute();
