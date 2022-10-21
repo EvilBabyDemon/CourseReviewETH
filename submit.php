@@ -27,6 +27,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             <p><b>Thx for your submission!</b></p>
 
             <?php
+
             //check DB if Course exists
             $course = $_POST["course"] . " ";
             $course = substr($course, 0, strpos($course, " "));
@@ -81,10 +82,26 @@ $api = trim(file_get_contents("secret/api.txt"));
                 }
                 return false;
             }
+            $lecture = 0;
+            if (isset($_POST["lecture"])) {
+                $lecture = $_POST["lecture"];
+            }
+            $exam = 0;
+            if (isset($_POST["exam"])) {
+                $exam = $_POST["exam"];
+            }
+            $grading = 0;
+            if (isset($_POST["grading"])) {
+                $grading = $_POST["grading"];
+            }
+
             $data = array(
                 'course_id' => $course,
                 'nethz' => $val,
                 'review' => $_POST["review"],
+                's1' => $lecture,
+                's2' => $exam,
+                's3' => $grading,
             );
             $ducky = $api . "insert?";
             $ducky = $ducky . http_build_query($data);

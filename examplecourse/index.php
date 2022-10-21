@@ -43,6 +43,34 @@ $api = trim(file_get_contents("../secret/api.txt"));
             if ($course) {
                 print "<b>$url $course[0]</b><br>";
                 $db->close();
+                
+                function getAvg(String $url, String $token, String $api)
+                {
+                    $ducky = $api . "rating/";
+                    $ducky = $ducky . $url;
+                    $ch = curl_init();
+                    curl_setopt($ch, CURLOPT_URL, $ducky);
+                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                    curl_setopt($ch, CURLOPT_CAINFO, "../cacert-2022-04-26.pem");
+                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
+
+                    $result = curl_exec($ch);
+                    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                    curl_close($ch);
+                    if ($code == 401) {
+                        return true;
+                    }
+
+                    $js = json_decode($result, false);
+                    $js = json_decode($js, false);
+
+                    foreach ($js as $key => $val) {
+                        foreach ($val as $nkey => $stars) {
+                            echo $nkey . " " . $stars;
+                        }
+                    }
+                    return false;
+                }
 
                 function getReviews(String $url, String $token, String $api)
                 {
@@ -75,6 +103,13 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     }
                     return false;
                 }
+                if (getAvg($url, $token, $api)) {
+                    //get new token
+                    require_once('../newToken.php');
+                    $token = newToken();
+                    getAvg($url, $token, $api);
+                }
+
                 if (getReviews($url, $token, $api)) {
                     //get new token
                     require_once('../newToken.php');

@@ -52,6 +52,30 @@
                             <textarea name="review" rows="4" placeholder="For some very hard, while others who already have knowledege about the content it is very easy." required></textarea>
                         </label>
                     </p>
+                    First question?
+                    <div class="rating"> 
+                        <input type="radio" name="lecture" value="5" id="5"><label for="5">☆</label>
+                        <input type="radio" name="lecture" value="4" id="4"><label for="4">☆</label>
+                        <input type="radio" name="lecture" value="3" id="3"><label for="3">☆</label>
+                        <input type="radio" name="lecture" value="2" id="2"><label for="2">☆</label>
+                        <input type="radio" name="lecture" value="1" id="1"><label for="1">☆</label>
+                    </div>
+                    2nd question?
+                    <div class="rating"> 
+                        <input type="radio" name="exam" value="5" id="e5"><label for="e5">☆</label>
+                        <input type="radio" name="exam" value="4" id="e4"><label for="e4">☆</label>
+                        <input type="radio" name="exam" value="3" id="e3"><label for="e3">☆</label>
+                        <input type="radio" name="exam" value="2" id="e2"><label for="e2">☆</label>
+                        <input type="radio" name="exam" value="1" id="e1"><label for="e1">☆</label>
+                    </div>
+                    3rd question?
+                    <div class="rating"> 
+                        <input type="radio" name="grading" value="5" id="g5"><label for="g5">☆</label>
+                        <input type="radio" name="grading" value="4" id="g4"><label for="g4">☆</label>
+                        <input type="radio" name="grading" value="3" id="g3"><label for="g3">☆</label>
+                        <input type="radio" name="grading" value="2" id="g2"><label for="g2">☆</label>
+                        <input type="radio" name="grading" value="1" id="g1"><label for="g1">☆</label>
+                    </div>
                     <p>
                         <button type="submit">Submit</button>
                     </p>
