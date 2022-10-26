@@ -8,8 +8,9 @@ $api = trim(file_get_contents("../secret/api.txt"));
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
-    <meta name="viewport" content="width=device-width">
     <title>Review</title>
+    <link rel="icon" href="../icon.png" type="image/icon type">
+    <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <link href="../main.css" rel="stylesheet" type="text/css" />
