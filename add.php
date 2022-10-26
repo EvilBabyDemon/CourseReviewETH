@@ -49,32 +49,48 @@
                         <label>
                             Review:
                             <br>
-                            <textarea name="review" rows="4" placeholder="For some very hard, while others who already have knowledege about the content it is very easy." required></textarea>
+                            <textarea name="review" rows="4" placeholder="For some very hard, while others who already have knowledge about the content it is very easy." required></textarea>
                         </label>
                     </p>
-                    First question?
-                    <div class="rating"> 
-                        <input type="radio" name="lecture" value="5" id="5"><label for="5">☆</label>
-                        <input type="radio" name="lecture" value="4" id="4"><label for="4">☆</label>
-                        <input type="radio" name="lecture" value="3" id="3"><label for="3">☆</label>
-                        <input type="radio" name="lecture" value="2" id="2"><label for="2">☆</label>
-                        <input type="radio" name="lecture" value="1" id="1"><label for="1">☆</label>
+                    Would <b>recommend</b> it <div class="tooltip">&#x1F6C8; <span class="tooltiptext">1 no, 5 yes</span></div> 
+                    <div class="rating">
+                        <input type="radio" name="recommend" value="5" id="recommend5"><label for="recommend5">☆</label>
+                        <input type="radio" name="recommend" value="4" id="recommend4"><label for="recommend4">☆</label>
+                        <input type="radio" name="recommend" value="3" id="recommend3"><label for="recommend3">☆</label>
+                        <input type="radio" name="recommend" value="2" id="recommend2"><label for="recommend2">☆</label>
+                        <input type="radio" name="recommend" value="1" id="recommend1"><label for="recommend1">☆</label>
                     </div>
-                    2nd question?
-                    <div class="rating"> 
-                        <input type="radio" name="exam" value="5" id="e5"><label for="e5">☆</label>
-                        <input type="radio" name="exam" value="4" id="e4"><label for="e4">☆</label>
-                        <input type="radio" name="exam" value="3" id="e3"><label for="e3">☆</label>
-                        <input type="radio" name="exam" value="2" id="e2"><label for="e2">☆</label>
-                        <input type="radio" name="exam" value="1" id="e1"><label for="e1">☆</label>
+                    <b>Interesting</b> content <div class="tooltip">&#x1F6C8; <span class="tooltiptext">1 boring, 5 very interesting</span></div> 
+                    <div class="rating">
+                        <input type="radio" name="interesting" value="5" id="interesting5"><label for="interesting5">☆</label>
+                        <input type="radio" name="interesting" value="4" id="interesting4"><label for="interesting4">☆</label>
+                        <input type="radio" name="interesting" value="3" id="interesting3"><label for="interesting3">☆</label>
+                        <input type="radio" name="interesting" value="2" id="interesting2"><label for="interesting2">☆</label>
+                        <input type="radio" name="interesting" value="1" id="interesting1"><label for="interesting1">☆</label>
                     </div>
-                    3rd question?
-                    <div class="rating"> 
-                        <input type="radio" name="grading" value="5" id="g5"><label for="g5">☆</label>
-                        <input type="radio" name="grading" value="4" id="g4"><label for="g4">☆</label>
-                        <input type="radio" name="grading" value="3" id="g3"><label for="g3">☆</label>
-                        <input type="radio" name="grading" value="2" id="g2"><label for="g2">☆</label>
-                        <input type="radio" name="grading" value="1" id="g1"><label for="g1">☆</label>
+                    Approriate <b>difficulty</b> <div class="tooltip">&#x1F6C8; <span class="tooltiptext">1 very hard, 5 very easy</span></div> 
+                    <div class="rating">
+                        <input type="radio" name="difficulty" value="5" id="difficulty5"><label for="difficulty5">☆</label>
+                        <input type="radio" name="difficulty" value="4" id="difficulty4"><label for="difficulty4">☆</label>
+                        <input type="radio" name="difficulty" value="3" id="difficulty3"><label for="difficulty3">☆</label>
+                        <input type="radio" name="difficulty" value="2" id="difficulty2"><label for="difficulty2">☆</label>
+                        <input type="radio" name="difficulty" value="1" id="difficulty1"><label for="difficulty1">☆</label>
+                    </div>
+                    Approriate amount of <b>effort</b> <div class="tooltip">&#x1F6C8; <span class="tooltiptext">1 worst, 5 best</span></div>
+                    <div class="rating">
+                        <input type="radio" name="effort" value="5" id="effort5"><label for="effort5">☆</label>
+                        <input type="radio" name="effort" value="4" id="effort4"><label for="effort4">☆</label>
+                        <input type="radio" name="effort" value="3" id="effort3"><label for="effort3">☆</label>
+                        <input type="radio" name="effort" value="2" id="effort2"><label for="effort2">☆</label>
+                        <input type="radio" name="effort" value="1" id="effort1"><label for="effort1">☆</label>
+                    </div>
+                    Amount and quality of <b>resources</b> <div class="tooltip">&#x1F6C8; <span class="tooltiptext">1 worst, 5 best</span></div> 
+                    <div class="rating">
+                        <input type="radio" name="resources" value="5" id="resources5"><label for="resources5">☆</label>
+                        <input type="radio" name="resources" value="4" id="resources4"><label for="resources4">☆</label>
+                        <input type="radio" name="resources" value="3" id="resources3"><label for="resources3">☆</label>
+                        <input type="radio" name="resources" value="2" id="resources2"><label for="resources2">☆</label>
+                        <input type="radio" name="resources" value="1" id="resources1"><label for="resources1">☆</label>
                     </div>
                     <p>
                         <button type="submit">Submit</button>

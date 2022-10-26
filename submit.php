@@ -82,26 +82,36 @@ $api = trim(file_get_contents("secret/api.txt"));
                 }
                 return false;
             }
-            $lecture = 0;
-            if (isset($_POST["lecture"])) {
-                $lecture = $_POST["lecture"];
+            $recommend = 0;
+            if (isset($_POST["recommend"])) {
+                $recommend = $_POST["recommend"];
             }
-            $exam = 0;
-            if (isset($_POST["exam"])) {
-                $exam = $_POST["exam"];
+            $interesting = 0;
+            if (isset($_POST["interesting"])) {
+                $interesting = $_POST["interesting"];
             }
-            $grading = 0;
-            if (isset($_POST["grading"])) {
-                $grading = $_POST["grading"];
+            $difficulty = 0;
+            if (isset($_POST["difficulty"])) {
+                $difficulty = $_POST["difficulty"];
+            }
+            $effort = 0;
+            if (isset($_POST["effort"])) {
+                $effort = $_POST["effort"];
+            }
+            $resources = 0;
+            if (isset($_POST["resources"])) {
+                $resources = $_POST["resources"];
             }
 
             $data = array(
                 'course_id' => $course,
                 'nethz' => $val,
                 'review' => $_POST["review"],
-                's1' => $lecture,
-                's2' => $exam,
-                's3' => $grading,
+                's1' => $recommend,
+                's2' => $interesting,
+                's3' => $difficulty,
+                's4' => $effort,
+                's5' => $resources
             );
             $ducky = $api . "insert?";
             $ducky = $ducky . http_build_query($data);
