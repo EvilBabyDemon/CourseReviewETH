@@ -7,7 +7,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
     <title>Review</title>
     <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
@@ -67,7 +67,11 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
                     foreach ($js as $key => $val) {
                         foreach ($val as $nkey => $stars) {
-                            echo $nkey . " " . $stars;
+                            ?> 
+                            <div class="stars-outer">
+                                <div class="stars-inner" style="width: <?php echo $stars ?>%;"></div>
+                            </div>
+                            <?php
                         }
                     }
                     return false;
