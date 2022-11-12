@@ -86,7 +86,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             <h3>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h3>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
-            <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existent reviews!</a> <br>
+            <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existing reviews!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/all.php">All courses with reviews!</a> <br>
 
             <?php
