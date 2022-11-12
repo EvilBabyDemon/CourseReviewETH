@@ -117,7 +117,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                     foreach ($js as $key => $val) {
                         $dbc = new SQLite3('secret/CourseReviews.db');
                         $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
-                        $stmtc->bindParam(':course', $val[1], SQLITE3_TEXT);
+                        $stmtc->bindParam(':course', $val[0], SQLITE3_TEXT);
                         $resultc = $stmtc->execute();
                         $rowc = $resultc->fetchArray();
 
@@ -133,9 +133,9 @@ $api = trim(file_get_contents("secret/api.txt"));
                             <fieldset>
                                 <legend><?php echo htmlspecialchars("$rowc[0]"); ?></legend>
                                 <label>
-                                    <input style="color:red" name="course" value="<?php echo htmlspecialchars($val[1]); ?>" readonly>
+                                    <input style="color:red" name="course" value="<?php echo htmlspecialchars($val[0]); ?>" readonly>
                                     <br>
-                                    <textarea name="review" rows="4"><?php echo htmlspecialchars($val[0]); ?></textarea>
+                                    <textarea name="review" rows="4"><?php echo htmlspecialchars($val[1]); ?></textarea>
                                 </label>
                                 <p>
                                     <button type="submit">Edit</button>
