@@ -21,7 +21,7 @@ $api = trim(file_get_contents("secret/api.txt"));
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
-    $val = $_SERVER["uniqueID"];
+    $uniqueID = $_SERVER["uniqueID"];
     ?>
     <div id="content">
         <div id="columnA">
@@ -83,45 +83,91 @@ $api = trim(file_get_contents("secret/api.txt"));
                 }
                 return false;
             }
-            $recommend = 0;
-            if (isset($_POST["recommend"])) {
-                $recommend = $_POST["recommend"];
-            }
-            $interesting = 0;
-            if (isset($_POST["interesting"])) {
-                $interesting = $_POST["interesting"];
-            }
-            $difficulty = 0;
-            if (isset($_POST["difficulty"])) {
-                $difficulty = $_POST["difficulty"];
-            }
-            $effort = 0;
-            if (isset($_POST["effort"])) {
-                $effort = $_POST["effort"];
-            }
-            $resources = 0;
-            if (isset($_POST["resources"])) {
-                $resources = $_POST["resources"];
+
+            function submitRating(String $ducky, String $token)
+            {
+                $ch = curl_init($ducky);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+                curl_setopt($ch, CURLOPT_POST, true);
+                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+
+                // Set HTTP Header for POST request
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . $token));
+
+                $result = curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                // Close cURL session handle
+                curl_close($ch);
+
+                if ($code == 401) {
+                    return true;
+                }
+                // handle curl error
+                if ($code != 200) {
+                    print "Error Code: $code <br>";
+                    print "Something went wrong I am sorry and the rating did not get saved.<br>";
+                } else {
+                    if ($result != '"success"') {
+                        print 'You already inserted this rating for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
+                    }
+                }
+                return false;
             }
 
-            $data = array(
-                'course_id' => $course,
-                'nethz' => $val,
-                'review' => $_POST["review"],
-                's1' => $recommend,
-                's2' => $interesting,
-                's3' => $difficulty,
-                's4' => $effort,
-                's5' => $resources
-            );
-            $ducky = $api . "insert?";
-            $ducky = $ducky . http_build_query($data);
-            if (submitReview($ducky, $token)) {
-                //get new token
-                require_once('newToken.php');
-                $token = newToken();
-                submitReview($ducky, $token);
+            //check if there was even anything they submited
+            $empty = true;
+
+            //submit a review if exists
+            if (isset($_POST["review"]) && $_POST["review"] != "") {
+                $empty = false;
+                $data = array(
+                    'course_id' => $course,
+                    'user_id' => $uniqueID,
+                    'review' => $_POST["review"]
+                );
+
+                $ducky = $api . "insertReview?";
+                $ducky = $ducky . http_build_query($data);
+
+                if (submitReview($ducky, $token)) {
+                    //get new token
+                    require_once('newToken.php');
+                    $token = newToken();
+                    submitReview($ducky, $token);
+                }
             }
+
+            $ratings = ["Recommended", "Interesting", "Difficulty", "Effort", "Resources"];
+            $ratingApi = $api . "insertRating?";
+            //submit each rating
+            foreach ($ratings as $val) {
+                if (isset($_POST[$val])) {
+                    $empty = false;
+                    $rating = $_POST[$val];
+                    $data = array(
+                        'course_id' => $course,
+                        'user_id' => $uniqueID,
+                        'rating_id' => $val,
+                        'rating' => $_POST[$val]
+                    );
+
+                    $ducky = $ratingApi . http_build_query($data);
+
+                    if (submitRating($ducky, $token)) {
+                        //get new token
+                        require_once('newToken.php');
+                        $token = newToken();
+                        submitRating($ducky, $token);
+                    }
+                }
+            }
+
+            if ($empty) {
+                print "You neither submitted a review nor any ratings.<br>";
+            }
+
             ?>
         </div>
     </div>
