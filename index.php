@@ -90,7 +90,8 @@ $api = trim(file_get_contents("secret/api.txt"));
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/all.php">All courses with reviews!</a> <br>
 
             <?php
-            function getStats(String $token, String $api) {
+            function getStats(String $token, String $api)
+            {
                 $ducky = $api . "stats/";
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $ducky);
@@ -118,7 +119,7 @@ $api = trim(file_get_contents("secret/api.txt"));
 
             function getLatest(String $token, String $api)
             {
-                $ducky = $api . "latest";
+                $ducky = $api . "latestReviews";
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $ducky);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
