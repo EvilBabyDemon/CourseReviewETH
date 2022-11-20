@@ -7,7 +7,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
+    <meta http-equiv="Content-Security-Policy">
     <title>Review</title>
     <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
@@ -44,7 +44,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
             if ($course) {
                 print "<b>$url $course[0]</b><br>";
                 $db->close();
-                
+
                 function getAvg(String $url, String $token, String $api)
                 {
                     $ducky = $api . "rating/";
@@ -61,18 +61,24 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     if ($code == 401) {
                         return true;
                     }
-
+                    if ($code != 200) {
+                        return false;
+                    }
                     $js = json_decode($result, false);
                     $js = json_decode($js, false);
 
-                    foreach ($js as $key => $val) {
-                        foreach ($val as $nkey => $stars) {
-                            ?> 
-                            <div class="stars-outer">
-                                <div class="stars-inner" style="width: <?php echo $stars ?>%;"></div>
-                            </div>
-                            <?php
+                    foreach ($js[0] as $nkey => $stars) {
+                        if ($stars = "null") {
+                            continue;
                         }
+
+                        print $nkey;
+            ?>
+                        <div class="stars-outer">
+                            <div class="stars-inner" style="width: <?php echo (intval($stars) * 20) ?>%;"></div>
+                        </div>
+                        <br>
+            <?php
                     }
                     return false;
                 }
@@ -98,10 +104,10 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     $js = json_decode($js, false);
 
                     if (sizeof($js) == 0) {
-                        echo "There is nothing here yet. Would be nice if you add a review if you took this course.";
+                        echo "There is no review here yet. Would be nice if you add one if you took this course.";
                     }
 
-                    foreach ($js as $key => $val) {
+                    foreach ($js as $val) {
                         foreach ($val as $nkey => $review) {
                             echo "<br> <div class=\"box\">" . nl2br(htmlspecialchars($review)) . "</div>";
                         }
