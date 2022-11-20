@@ -21,7 +21,7 @@ $api = trim(file_get_contents("secret/api.txt"));
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
-    $val = $_SERVER["uniqueID"];
+    $user_id = $_SERVER["uniqueID"];
     ?>
     <div id="content">
         <div id="columnA">
@@ -49,16 +49,16 @@ $api = trim(file_get_contents("secret/api.txt"));
                 if ("" == trim($_POST['review'])) {
                     $data = array(
                         'course_id' => $_POST["course"],
-                        'nethz' => $val,
+                        'user_id' => $user_id,
                     );
-                    $ducky = $ducky . "remove?" . http_build_query($data);
+                    $ducky = $ducky . "removeReview?" . http_build_query($data);
                 } else {
                     $data = array(
                         'course_id' => $_POST["course"],
-                        'nethz' => $val,
+                        'user_id' => $user_id,
                         'review' => $_POST["review"],
                     );
-                    $ducky = $ducky . "update?" . http_build_query($data);
+                    $ducky = $ducky . "updateReview?" . http_build_query($data);
                 }
 
                 curl_setopt($ch, CURLOPT_URL, $ducky);
@@ -91,10 +91,12 @@ $api = trim(file_get_contents("secret/api.txt"));
             ?>
 
             <?php
-            function getUserReviews(String $val, String $token, String $api)
+
+            function getUserRatings(String $user_id, String $token, String $api)
             {
-                $ducky = $api . "user/";
-                $ducky = $ducky . $val;
+
+                $ducky = $api . "userRating/";
+                $ducky = $ducky . $user_id;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $ducky);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -105,53 +107,131 @@ $api = trim(file_get_contents("secret/api.txt"));
                 $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
                 curl_close($ch);
                 if ($code == 401) {
-                    return true;
+                    return false;
                 }
-
-                if (strlen($result) == 2) {
-                    echo "You didn't submit anything yet.";
-                } else {
-
+                if ($code != 200) {
+                    return false;
+                }
+                print $result;
+                if (strlen($result) > 0) {
                     $js = json_decode($result, false);
-
-                    foreach ($js as $key => $val) {
-                        $dbc = new SQLite3('secret/CourseReviews.db');
-                        $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
-                        $stmtc->bindParam(':course', $val[0], SQLITE3_TEXT);
-                        $resultc = $stmtc->execute();
-                        $rowc = $resultc->fetchArray();
-
-                        echo "<br>";
-                        if ($val[2] == 0) {
-                            echo "<b>Not yet verified!</b><br>";
-                        } elseif ($val[2] == -1) {
-                            echo "<div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>";
-                        }
-
-            ?>
-                        <form method="post" action="edit.php">
-                            <fieldset>
-                                <legend><?php echo htmlspecialchars("$rowc[0]"); ?></legend>
-                                <label>
-                                    <input style="color:red" name="course" value="<?php echo htmlspecialchars($val[0]); ?>" readonly>
-                                    <br>
-                                    <textarea name="review" rows="4"><?php echo htmlspecialchars($val[1]); ?></textarea>
-                                </label>
-                                <p>
-                                    <button type="submit">Edit</button>
-                                </p>
-                            </fieldset>
-                        </form>
-            <?php
-                    }
+                    return $js;
                 }
-                return false;
+                return true;
             }
-            if (getUserReviews($val, $token, $api)) {
+
+            function getUserReviews(String $user_id, String $token, String $api)
+            {
+                $ducky = $api . "userReview/";
+                $ducky = $ducky . $user_id;
+                $ch = curl_init();
+                curl_setopt($ch, CURLOPT_URL, $ducky);
+                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
+
+                $result = curl_exec($ch);
+                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                curl_close($ch);
+                if ($code == 401) {
+                    return false;
+                }
+
+                if (strlen($result) > 2) {
+                    $js = json_decode($result, false);
+                    return $js;
+                }
+                return true;
+            }
+
+            if (!$ratings = getUserRatings($user_id, $token, $api)) {
                 //get new token
                 require_once('newToken.php');
                 $token = newToken();
-                getUserReviews($val, $token, $api);
+                $ratings = getUserRatings($user_id, $token, $api);
+            }
+
+            if (!$reviews = getUserReviews($user_id, $token, $api, $ratings)) {
+                //get new token
+                require_once('newToken.php');
+                $token = newToken();
+                $reviews = getUserReviews($user_id, $token, $api, $ratings);
+            }
+
+
+            class Review
+            {
+                // Properties
+                public $course_id;
+                public $review;
+                public $rating;
+
+                // Methods
+                function printCourse()
+                {
+                    $dbc = new SQLite3('secret/CourseReviews.db');
+                    $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
+                    $stmtc->bindParam(':course', $this->course_id, SQLITE3_TEXT);
+                    $resultc = $stmtc->execute();
+                    $rowc = $resultc->fetchArray();
+
+                    echo "<br>";
+                    if ($this->review[1] == 0) {
+                        echo "<b>Not yet verified!</b><br>";
+                    } elseif ($this->review[1] == -1) {
+                        echo "<div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>";
+                    }
+
+            ?>
+                    <form method="post" action="edit.php">
+                        <fieldset>
+                            <legend><?php echo htmlspecialchars("$rowc[0]"); ?></legend>
+                            <label>
+                                <input style="color:red" name="course" value="<?php echo htmlspecialchars($this->course_id); ?>" readonly>
+                                <br>
+                                <textarea name="review" rows="4"><?php echo htmlspecialchars($this->review[0]); ?></textarea>
+                            </label>
+
+                            <div w3-include-html="content.html"></div>
+                            <p>
+                                <button type="submit">Edit</button>
+                            </p>
+                        </fieldset>
+                    </form>
+            <?php
+                    print_r($this->rating);
+                    require("rating.html");
+                }
+            }
+            $reviewArr = [];
+            foreach ($reviews as $arr) {
+                $tmp_review = new Review();
+                $tmp_review->course_id = $arr[0];
+                $tmp_review->review = [$arr[1], $arr[2]];
+                array_push($reviewArr, $tmp_review);
+            }
+
+            foreach ($ratings as $arr) {
+                $found = false;
+                foreach ($reviewArr as $rev) {
+                    if ($rev->course_id == $arr[0]) {
+                        $rev->rating = [$arr[1], $arr[2], $arr[3], $arr[4], $arr[5]];
+                        $found = true;
+                        break;
+                    }
+                }
+
+                if ($found) {
+                    continue;
+                }
+                $tmp_review = new Review();
+                $tmp_review->course_id = $arr[0];
+                $tmp_review->rating = [$arr[1], $arr[2], $arr[3], $arr[4], $arr[5]];
+                array_push($reviewArr, $tmp_review);
+            }
+
+            foreach ($reviewArr as $review) {
+                $review->printCourse();
             }
 
             ?>
