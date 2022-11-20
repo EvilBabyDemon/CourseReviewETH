@@ -39,10 +39,10 @@ $api = trim(file_get_contents("secret/api.txt"));
                 }
                 $js = json_decode($result);
                 $js = json_decode($js);
-                ?>
+            ?>
                 <ul>
                     <?php
-                    foreach($js as $value){
+                    foreach ($js as $value) {
                         $coursename = "";
                         $db = new SQLite3('secret/CourseReviews.db');
                         $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
@@ -52,15 +52,15 @@ $api = trim(file_get_contents("secret/api.txt"));
                             $coursename = $row[0];
                         }
                         $db->close();
-                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/' . htmlspecialchars($value->CourseNumber) . '/">' . 
-                        htmlspecialchars($value->CourseNumber) . ' <b>' . htmlspecialchars($coursename) . '</b></a></li>';
+                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/' . htmlspecialchars($value->CourseNumber) . '/">' .
+                            htmlspecialchars($value->CourseNumber) . ' <b>' . htmlspecialchars($coursename) . '</b></a></li>';
                     }
                     ?>
                 </ul>
-                <?php
+            <?php
                 return false;
             }
-            $ducky = $api . "all";
+            $ducky = $api . "allReviews";
             if (getAll($ducky, $token)) {
                 //get new token
                 require_once('newToken.php');
@@ -72,4 +72,5 @@ $api = trim(file_get_contents("secret/api.txt"));
     </div>
     <?php include 'includes/footer.php'; ?>
 </body>
+
 </html>
