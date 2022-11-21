@@ -1,5 +1,5 @@
 <?php
-function getStats(String $token, String $api)
+function getMetaStats(String $token, String $api)
 {
     $ducky = $api . "stats";
     $ch = curl_init();
@@ -17,14 +17,13 @@ function getStats(String $token, String $api)
         return true;
     }
     $js = json_decode(json_decode($result, true), true);
-    //$js[0]['total'] htmlspecialchars($js[0]['percourse'])
     return $js;
 }
-if (!$metaStats = getStats($token, $api)) {
+if (!$metaStats = getMetaStats($token, $api)) {
     //get new token
     require_once('newToken.php');
     $token = newToken();
-    $metaStats = getStats($token, $api);
+    $metaStats = getMetaStats($token, $api);
 }
 $metaString = "";
 if (!is_bool($metaStats)) {
