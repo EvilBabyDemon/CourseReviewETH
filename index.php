@@ -84,7 +84,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                 <input id="searchbutton" type="submit" value="Search">
             </form>
 
-            <h3>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h3>
+            <h3>Welcome!</h3>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/add/">Add a review!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit/">Edit your existing reviews!</a> <br>
