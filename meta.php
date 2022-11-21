@@ -1,4 +1,4 @@
-<?php 
+<?php
 function getStats(String $token, String $api)
 {
     $ducky = $api . "stats";
@@ -13,7 +13,7 @@ function getStats(String $token, String $api)
     if ($code == 401) {
         return false;
     }
-    if($code != 200) {
+    if ($code != 200) {
         return true;
     }
     $js = json_decode(json_decode($result, true), true);
@@ -30,14 +30,9 @@ $metaString = "";
 if (!is_bool($metaStats)) {
     $metaString = " with " . htmlspecialchars($js[0]['total']) . " reviews for " . htmlspecialchars($js[0]['percourse']) . " courses";
 }
-
 ?>
-
-
-
-
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/">
 <meta property="og:title" content="CourseReview">
-<meta property="og:description" content="Site to review courses from ETHZ<?php print $metaString?>.">
+<meta property="og:description" content="Site to review courses from ETHZ<?php print $metaString ?>.">
 <meta property="og:image" content="https://n.ethz.ch/~lteufelbe/coursereview/icon.png">
