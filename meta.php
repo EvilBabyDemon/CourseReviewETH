@@ -27,7 +27,7 @@ if (!$metaStats = getMetaStats($token, $api)) {
 }
 $metaString = "";
 if (!is_bool($metaStats)) {
-    $metaString = " with " . htmlspecialchars($js[0]['total']) . " reviews for " . htmlspecialchars($js[0]['percourse']) . " courses";
+    $metaString = " with " . htmlspecialchars($metaStats[0]['total']) . " reviews for " . htmlspecialchars($metaStats[0]['percourse']) . " courses";
 }
 ?>
 <meta property="og:type" content="website">
