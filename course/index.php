@@ -66,9 +66,9 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     }
                     $js = json_decode($result, false);
                     $js = json_decode($js, false);
-
+                    
                     foreach ($js[0] as $nkey => $stars) {
-                        if ($stars = "null") {
+                        if ($stars == null) {
                             continue;
                         }
 

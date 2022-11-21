@@ -1,0 +1,5 @@
+AuthType shibboleth
+ShibRequireSession On
+ShibRedirectToSSL 443
+require valid-user
+ErrorDocument 404 /~lteufelbe/coursereview/course/index.php

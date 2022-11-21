@@ -55,7 +55,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                     <?php
                     while ($row = $result->fetchArray()) {
                     ?>
-                        <li><a href="<?php echo "https://n.ethz.ch/~lteufelbe/coursereview/" . htmlspecialchars($row[0]) . "/"; ?>"><?php echo htmlspecialchars($row[0]) . " <b>" . htmlspecialchars($row[1]) . "</b>"; ?></a></li>
+                        <li><a href="<?php echo "https://n.ethz.ch/~lteufelbe/coursereview/course/" . htmlspecialchars($row[0]) . "/"; ?>"><?php echo htmlspecialchars($row[0]) . " <b>" . htmlspecialchars($row[1]) . "</b>"; ?></a></li>
                     <?php
                     }
                     $db->close();
@@ -85,8 +85,8 @@ $api = trim(file_get_contents("secret/api.txt"));
 
             <h3>Welcome <?php echo htmlspecialchars("$name $surname"); ?>!</h3>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
-            <a href="https://n.ethz.ch/~lteufelbe/coursereview/add.php">Add a review!</a> <br>
-            <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit your existing reviews!</a> <br>
+            <a href="https://n.ethz.ch/~lteufelbe/coursereview/add/">Add a review!</a> <br>
+            <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit/">Edit your existing reviews!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/all.php">All courses with reviews!</a> <br>
 
             <?php
