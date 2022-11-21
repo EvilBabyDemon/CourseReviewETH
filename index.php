@@ -92,7 +92,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             <?php
             function getStats(String $token, String $api)
             {
-                $ducky = $api . "stats/";
+                $ducky = $api . "stats";
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $ducky);
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -103,6 +103,9 @@ $api = trim(file_get_contents("secret/api.txt"));
                 curl_close($ch);
                 if ($code == 401) {
                     return true;
+                }
+                if($code != 200) {
+                    print "Errorcode: " . $code;
                 }
                 $js = json_decode(json_decode($result, true), true);
                 print "<b>" .  htmlspecialchars($js[0]['total']) . "</b> reviews for <b>" . htmlspecialchars($js[0]['percourse']) . "</b> courses have been published so far.";
