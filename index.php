@@ -149,7 +149,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                         }
                         $db->close();
 
-                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/' . htmlspecialchars($value->CourseNumber) . '/">' .
+                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/course/' . htmlspecialchars($value->CourseNumber) . '/">' .
                             htmlspecialchars($value->CourseNumber) . ' <b>' . htmlspecialchars($coursename) . '</b></a></li>';
                     }
                     ?>
