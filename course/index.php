@@ -9,11 +9,11 @@ $api = trim(file_get_contents("../secret/api.txt"));
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy">
     <title>Review</title>
-    <link rel="icon" href="../icon.png" type="image/icon type">
+    <link rel="icon" href="../../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="../main.css" rel="stylesheet" type="text/css" />
+    <link href="../../main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
@@ -21,7 +21,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
     $url = $_SERVER["REQUEST_URI"];
     $url = substr($url, strpos($url, "coursereview"), strlen($url));
-    $url = str_replace("coursereview/", "", $url);
+    $url = str_replace("coursereview/course/", "", $url);
     $url = substr($url, 0, strpos($url, "/"));
     $url = trim($url);
 
@@ -66,9 +66,9 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     }
                     $js = json_decode($result, false);
                     $js = json_decode($js, false);
-
+                    
                     foreach ($js[0] as $nkey => $stars) {
-                        if ($stars = "null") {
+                        if ($stars == null) {
                             continue;
                         }
 

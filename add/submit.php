@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-$token = file_get_contents("secret/key.txt");
-$api = trim(file_get_contents("secret/api.txt"));
+$token = file_get_contents("../secret/key.txt");
+$api = trim(file_get_contents("../secret/api.txt"));
 ?>
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>Review</title>
-    <link rel="icon" href="icon.png" type="image/icon type">
+    <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="main.css" rel="stylesheet" type="text/css" />
+    <link href="../main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <?php include 'includes/menu.php' ?>
+    <?php include '../includes/menu.php' ?>
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
@@ -33,7 +33,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             $course = $_POST["course"] . " ";
             $course = substr($course, 0, strpos($course, " "));
 
-            $db = new SQLite3('secret/CourseReviews.db');
+            $db = new SQLite3('../secret/CourseReviews.db');
 
             $stmt = $db->prepare("SELECT * FROM COURSES WHERE COURSE=:course");
             $stmt->bindParam(':course', $course, SQLITE3_TEXT);
@@ -52,7 +52,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
                 curl_setopt($ch, CURLINFO_HEADER_OUT, true);
                 curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+                curl_setopt($ch, CURLOPT_CAINFO, "../cacert-2022-04-26.pem");
                 curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
                 // Set HTTP Header for POST request
@@ -75,7 +75,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                     if ($result == '"inserted"') {
                         print "<p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
                     } else {
-                        print 'You already inserted a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
+                        print 'You already inserted a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit/">Edit</a> to change it.<br>';
                     }
                     echo htmlspecialchars($_POST["course"]);
                     print "<br>";
@@ -84,37 +84,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                 return false;
             }
 
-            function submitRating(String $ducky, String $token)
-            {
-                $ch = curl_init($ducky);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLINFO_HEADER_OUT, true);
-                curl_setopt($ch, CURLOPT_POST, true);
-                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-
-                // Set HTTP Header for POST request
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . $token));
-
-                $result = curl_exec($ch);
-                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                // Close cURL session handle
-                curl_close($ch);
-
-                if ($code == 401) {
-                    return true;
-                }
-                // handle curl error
-                if ($code != 200) {
-                    print "Error Code: $code <br>";
-                    print "Something went wrong I am sorry and the rating did not get saved.<br>";
-                } else {
-                    if ($result != '"success"') {
-                        print 'You already inserted this rating for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit.php">Edit</a> to change it.<br>';
-                    }
-                }
-                return false;
-            }
+            require_once("../submitRating.php");
 
             //check if there was even anything they submited
             $empty = true;
@@ -133,7 +103,7 @@ $api = trim(file_get_contents("secret/api.txt"));
 
                 if (submitReview($ducky, $token)) {
                     //get new token
-                    require_once('newToken.php');
+                    require_once('../newToken.php');
                     $token = newToken();
                     submitReview($ducky, $token);
                 }
@@ -157,7 +127,7 @@ $api = trim(file_get_contents("secret/api.txt"));
 
                     if (submitRating($ducky, $token)) {
                         //get new token
-                        require_once('newToken.php');
+                        require_once('../newToken.php');
                         $token = newToken();
                         submitRating($ducky, $token);
                     }
@@ -171,7 +141,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             ?>
         </div>
     </div>
-    <?php include 'includes/footer.php'; ?>
+    <?php include '../includes/footer.php'; ?>
 </body>
 
 </html>

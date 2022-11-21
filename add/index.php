@@ -5,15 +5,15 @@
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>Review</title>
-    <link rel="icon" href="icon.png" type="image/icon type">
+    <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
     <meta name="description" content="" />
-    <link href="main.css" rel="stylesheet" type="text/css" />
+    <link href="../main.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
-    <?php include 'includes/menu.php' ?>
+    <?php include '../includes/menu.php' ?>
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
@@ -33,7 +33,7 @@
                                                                                                                                                         } ?> required>
                         <datalist id="courses">
                             <?php
-                            $db = new SQLite3('secret/CourseReviews.db');
+                            $db = new SQLite3('../secret/CourseReviews.db');
                             $stmt = $db->prepare("SELECT * FROM COURSES");
                             $result = $stmt->execute();
 
@@ -53,7 +53,10 @@
                             <textarea name="review" rows="4" placeholder="For some very hard, while others who already have knowledge about the content it is very easy."></textarea>
                         </label>
                     </p>
-                    <?php require("rating.html"); ?>
+                    <?php 
+                    require_once("../rating.php");
+                    includeRating(null, 0);
+                    ?>
                     <p>
                         <button type="submit">Submit</button>
                     </p>
@@ -62,7 +65,7 @@
 
         </div>
     </div>
-    <?php include 'includes/footer.php'; ?>
+    <?php include '../includes/footer.php'; ?>
 </body>
 
 </html>
