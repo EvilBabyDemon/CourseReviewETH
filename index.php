@@ -24,7 +24,7 @@ $api = trim(file_get_contents("secret/api.txt"));
         $result = $stmt->execute();
 
         if ($result->fetchArray()) {
-            echo "<meta http-equiv=\"Refresh\" content=\"0; url='https://n.ethz.ch/~lteufelbe/coursereview/$course/'\" />)";
+            echo "<meta http-equiv=\"Refresh\" content=\"0; url='https://n.ethz.ch/~lteufelbe/coursereview/course/$course/'\" />)";
             $db->close();
             exit();
         }
