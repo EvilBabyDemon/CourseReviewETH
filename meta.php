@@ -27,11 +27,11 @@ if (!$metaStats = getMetaStats($token, $api)) {
 }
 $metaString = "";
 if (!is_bool($metaStats)) {
-    $metaString = " with " . htmlspecialchars($metaStats[0]['total']) . " reviews for " . htmlspecialchars($metaStats[0]['percourse']) . " courses";
+    $metaString = ": " . htmlspecialchars($metaStats[0]['total']) . " reviews for " . htmlspecialchars($metaStats[0]['percourse']) . " courses";
 }
 ?>
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/">
 <meta property="og:title" content="CourseReview">
-<meta property="og:description" content="Site to review courses from ETHZ<?php print $metaString ?>.">
+<meta property="og:description" content="Review courses from ETHZ<?php print $metaString ?>">
 <meta property="og:image" content="https://n.ethz.ch/~lteufelbe/coursereview/icon.png">
