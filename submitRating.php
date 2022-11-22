@@ -5,7 +5,7 @@ function submitRating(String $ducky, String $token)
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLINFO_HEADER_OUT, true);
     curl_setopt($ch, CURLOPT_POST, true);
-    curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
+    curl_setopt($ch, CURLOPT_CAINFO, "../cacert-2022-04-26.pem");
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
 
     // Set HTTP Header for POST request
