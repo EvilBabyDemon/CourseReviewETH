@@ -40,7 +40,7 @@ $api = trim(file_get_contents("secret/api.txt"));
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
-    $val = $_SERVER["uniqueID"];
+    $user_id = $_SERVER["uniqueID"];
     ?>
     <div id="content">
         <div id="columnA">

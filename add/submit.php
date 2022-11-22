@@ -21,7 +21,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
     <?php
     $surname = $_SERVER["surname"];
     $name = $_SERVER["givenName"];
-    $uniqueID = $_SERVER["uniqueID"];
+    $user_id = $_SERVER["uniqueID"];
     ?>
     <div id="content">
         <div id="columnA">
@@ -94,7 +94,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                 $empty = false;
                 $data = array(
                     'course_id' => $course,
-                    'user_id' => $uniqueID,
+                    'user_id' => $user_id,
                     'review' => $_POST["review"]
                 );
 
@@ -118,7 +118,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     $rating = $_POST[$val];
                     $data = array(
                         'course_id' => $course,
-                        'user_id' => $uniqueID,
+                        'user_id' => $user_id,
                         'rating_id' => $val,
                         'rating' => $_POST[$val]
                     );
