@@ -15,3 +15,6 @@
         Edit
     </a>
 </div>
+<?php
+$user_id = $_SERVER["uniqueID"];
+?>

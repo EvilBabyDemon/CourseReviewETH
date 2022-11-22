@@ -18,11 +18,6 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
 <body>
     <?php include '../includes/menu.php' ?>
-    <?php
-    $surname = $_SERVER["surname"];
-    $name = $_SERVER["givenName"];
-    $user_id = $_SERVER["uniqueID"];
-    ?>
     <div id="content">
         <div id="columnA">
 

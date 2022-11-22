@@ -18,11 +18,6 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
 <body>
     <?php include '../includes/menu.php' ?>
-    <?php
-    $surname = $_SERVER["surname"];
-    $name = $_SERVER["givenName"];
-    $user_id = $_SERVER["uniqueID"];
-    ?>
     <div id="content">
         <div id="columnA">
             <p><b>Thx for your submission!</b></p>
@@ -114,6 +109,9 @@ $api = trim(file_get_contents("../secret/api.txt"));
             //submit each rating
             foreach ($ratings as $val) {
                 if (isset($_POST[$val])) {
+                    if ($_POST[$val] == 0) {
+                        continue;
+                    }
                     $empty = false;
                     $rating = $_POST[$val];
                     $data = array(

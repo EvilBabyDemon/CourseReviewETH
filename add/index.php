@@ -14,11 +14,6 @@
 
 <body>
     <?php include '../includes/menu.php' ?>
-    <?php
-    $surname = $_SERVER["surname"];
-    $name = $_SERVER["givenName"];
-    $user_id = $_SERVER["uniqueID"];
-    ?>
     <div id="content">
         <div id="columnA">
             <p><b>Add a CourseReview here.</b><br>
