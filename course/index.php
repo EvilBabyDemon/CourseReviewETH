@@ -67,12 +67,20 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     $js = json_decode($result, false);
                     $js = json_decode($js, false);
                     
+                    $rating_names = [
+                        "AVG(Recommended)" => "Would <b>recommend</b> it",
+                        "AVG(Interesting)" => "<b>Interesting</b> content",
+                        "AVG(Difficulty)" => "Approriate <b>difficulty</b>",
+                        "AVG(Effort)" => "Approriate amount of <b>effort</b>",
+                        "AVG(Resources)" => "Amount and quality of <b>resources</b>"
+                    ];
+
                     foreach ($js[0] as $nkey => $stars) {
                         if ($stars == null) {
                             continue;
                         }
 
-                        print $nkey;
+                        print $rating_names[$nkey];
             ?>
                         <div class="stars-outer">
                             <div class="stars-inner" style="width: <?php echo (intval($stars) * 20) ?>%;"></div>
