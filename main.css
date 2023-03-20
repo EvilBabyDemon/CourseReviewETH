@@ -252,6 +252,7 @@ a {
   .stars-outer {
     display: inline-block;
     position: relative;
+    font-size: 2vw;
   }
    
   .stars-outer::before {
@@ -264,9 +265,10 @@ a {
     left: 0;
     white-space: nowrap;
     overflow: hidden;
+    font-size: 2vw;
   }
    
   .stars-inner::before {
     content: "★ ★ ★ ★ ★";
-    color: #f8ce0b;
+    color: #FFD700;
   }
