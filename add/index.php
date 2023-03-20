@@ -3,7 +3,6 @@
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>CourseReview</title>
     <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
@@ -42,13 +41,21 @@
                         </datalist>
                     </p>
                     <p>
-                        <label>
-                            Review:
-                            <br>
-                            <textarea name="review" rows="4" placeholder="For some very hard, while others who already have knowledge about the content it is very easy."></textarea>
-                        </label>
+                        <label>Review:</label><br>
+                            <textarea name="review" id="text" rows="4" placeholder="For some very hard, while others who already have knowledge about the content it is very easy."></textarea>
                     </p>
-                    <?php 
+                    <script>
+                        if (localStorage.text) {
+                            document.getElementById('text').innerHTML = localStorage.text;
+                        }
+                        const input = document.querySelector('textarea');
+                        input.addEventListener('input', updateValue);
+
+                        function updateValue(e) {
+                            localStorage.text = e.target.value;
+                        }
+                    </script>
+                    <?php
                     require_once("../rating.php");
                     includeRating(null, 0);
                     ?>

@@ -84,6 +84,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/add/">Add a review!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit/">Edit your existing reviews!</a> <br>
             <a href="https://n.ethz.ch/~lteufelbe/coursereview/all.php">All courses with reviews!</a> <br>
+            <a href="https://ergebnisseub.sp.ethz.ch/" target="_blank">Results of the Teaching evaluation</a> <br>
 
             <?php
             function getStats(String $token, String $api)

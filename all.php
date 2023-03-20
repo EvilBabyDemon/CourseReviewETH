@@ -43,9 +43,9 @@ $api = trim(file_get_contents("secret/api.txt"));
             ?>
                 <ul>
                     <?php
+                    $db = new SQLite3('secret/CourseReviews.db');
                     foreach ($js as $value) {
                         $coursename = "";
-                        $db = new SQLite3('secret/CourseReviews.db');
                         $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
                         $stmt->bindParam(':course', $value->CourseNumber, SQLITE3_TEXT);
                         $qresult = $stmt->execute();
