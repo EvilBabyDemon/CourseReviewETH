@@ -9,7 +9,7 @@ $api = trim(file_get_contents("secret/api.txt"));
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
     <title>CourseReview</title>
-    <?php include "meta.php"?>
+    <?php include "meta.php" ?>
     <link rel="icon" href="icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
@@ -52,10 +52,10 @@ $api = trim(file_get_contents("secret/api.txt"));
                         if ($row = $qresult->fetchArray()) {
                             $coursename = $row[0];
                         }
-                        $db->close();
                         echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/course/' . htmlspecialchars($value->CourseNumber) . '/">' .
                             htmlspecialchars($value->CourseNumber) . ' <b>' . htmlspecialchars($coursename) . '</b></a></li>';
                     }
+                    $db->close();
                     ?>
                 </ul>
             <?php
