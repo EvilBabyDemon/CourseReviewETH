@@ -52,7 +52,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                         if ($row = $qresult->fetchArray()) {
                             $coursename = $row[0];
                         }
-                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/course/' . htmlspecialchars($value->CourseNumber) . '/">' .
+                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/?course=' . htmlspecialchars($value->CourseNumber) . '">' .
                             htmlspecialchars($value->CourseNumber) . ' <b>' . htmlspecialchars($coursename) . '</b></a></li>';
                     }
                     $db->close();
