@@ -6,7 +6,7 @@ $api = trim(file_get_contents("secret/api.txt"));
 ?>
 
 <?php
-if(!isset($_GET["course"])) {
+if (!isset($_GET["course"])) {
     exit();
 }
 
@@ -24,7 +24,7 @@ if ($course) {
 ?>
 
 <?php
-function getAvgHead(String $course_nr, String $token, String $api)
+function getRatingsHead(String $course_nr, String $token, String $api)
 {
     $ducky = $api . "rating/";
     $ducky = $ducky . $course_nr;
@@ -47,18 +47,23 @@ function getAvgHead(String $course_nr, String $token, String $api)
     $js = json_decode($js, false);
     $sum = 0.0;
     $acc = 0.0;
+
+    $rating_names = [
+        "AVG(Recommended)" => "Would <b>recommend</b> it",
+        "AVG(Interesting)" => "<b>Interesting</b> content",
+        "AVG(Difficulty)" => "Approriate <b>difficulty</b>",
+        "AVG(Effort)" => "Approriate amount of <b>effort</b>",
+        "AVG(Resources)" => "Amount and quality of <b>resources</b>"
+    ];
+
+
     foreach ($js[0] as $nkey => $stars) {
         if ($stars == null) {
             continue;
         }
-        $sum += doubleval($stars);
-        $acc += 1;
+        //Printing star amount with respective Description
+        print "[" . $rating_names[$nkey] . ": " . round(doubleval($stars), 2) . "] ";
     }
-    if($acc != 0) {
-        $res = round($sum/$acc, 2);
-        print ": Average rating: $res/5";
-    }
-
     return false;
 }
 ?>
@@ -73,21 +78,32 @@ function getAvgHead(String $course_nr, String $token, String $api)
     <meta name="keywords" content="" />
     <meta name="description" content="" />
     <link href="main.css" rel="stylesheet" type="text/css" />
-    <meta property="og:type" content="website"/>
-    <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/"/>
-    <meta property="og:title" content="CourseReview"/>
-    <meta property="og:description" content="<?php
-    print "Reviews for $course[0]"; 
+    <?php
     if ($course) {
-        if (getAvgHead($course_nr, $token, $api, false)) {
-            //get new token
-            require_once('newToken.php');
-            $token = newToken();
-            getAvgHead($course_nr, $token, $api, false);
-        }
+    ?>
+        <meta property="og:image" content="https://n.ethz.ch/~lteufelbe/coursereview/icon.png" />
+        <meta property="og:type" content="website" />
+        <meta property="og:site_name" content="CourseReview" />
+        <meta property="og:title" content="<?php print "$course_nr: $course[0]"; ?>" />
+        <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/<?php print $course_url ?>" />
+        <meta property="og:description" content="<?php
+                                                    if (getRatingsHead($course_nr, $token, $api, false)) {
+                                                        //get new token
+                                                        require_once('newToken.php');
+                                                        $token = newToken();
+                                                        getRatingsHead($course_nr, $token, $api, false);
+                                                    }
+                                                    ?>" />
+    <?php
+    } else {
+        require("meta.php");
+    ?>
+        <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/">
+        <meta property="og:title" content="CourseReview Homepage">
+    <?php
     }
-    ?>"/>
-    <meta property="og:image" content="https://n.ethz.ch/~lteufelbe/coursereview/icon.png"/>
+
+    ?>
 </head>
 
 <body>
@@ -121,7 +137,7 @@ function getAvgHead(String $course_nr, String $token, String $api)
                     }
                     $js = json_decode($result, false);
                     $js = json_decode($js, false);
-                    
+
                     $rating_names = [
                         "AVG(Recommended)" => "Would <b>recommend</b> it",
                         "AVG(Interesting)" => "<b>Interesting</b> content",
@@ -191,7 +207,7 @@ function getAvgHead(String $course_nr, String $token, String $api)
                     getReviews($course_nr, $token, $api);
                 }
             } else {
-                echo 'This is no course nor does this page exist. So here you have an error code: <b>404</b>';
+                echo 'This course number is not correct! If you think there should be a course with that number please contact me.';
             }
             ?>
         </div>
