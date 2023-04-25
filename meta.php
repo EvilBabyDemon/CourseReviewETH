@@ -31,7 +31,6 @@ if (!is_bool($metaStats)) {
 }
 ?>
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/">
-<meta property="og:title" content="CourseReview">
-<meta property="og:description" content="Review courses from ETHZ<?php print $metaString ?>">
+<meta property="og:site_name" content="CourseReview">
 <meta property="og:image" content="https://n.ethz.ch/~lteufelbe/coursereview/icon.png">
+<meta property="og:description" content="Review courses from ETHZ<?php print $metaString ?>">
