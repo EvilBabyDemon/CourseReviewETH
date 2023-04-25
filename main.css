@@ -79,6 +79,8 @@ select {
     font: inherit;
     color: var(--text-color);
     background: none;
+    border-radius: 16px;
+    padding: 0.5em;
 }
 
 textarea,
