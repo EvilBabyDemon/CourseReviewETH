@@ -64,7 +64,6 @@ $api = trim(file_get_contents("secret/api.txt"));
             ?>
 
 
-
             <form method="post" action="#">
                 <input id="search" list="courses" name="course" placeholder="Search for Reviews">
                 <datalist id="courses">
@@ -75,7 +74,7 @@ $api = trim(file_get_contents("secret/api.txt"));
 
                     while ($row = $result->fetchArray()) {
                     ?>
-                        <option value="<?php echo "$row[0] $row[1]"; ?>">
+                        <option value="<?php print htmlspecialchars($row[0]) . " " . htmlspecialchars($row[1]); ?>">
                         <?php
                     }
                     $db->close();
