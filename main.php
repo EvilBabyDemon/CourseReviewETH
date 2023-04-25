@@ -7,9 +7,11 @@ $api = trim(file_get_contents("secret/api.txt"));
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
+    <meta http-equiv="Content-Security-Policy">
     <title>CourseReview</title>
-    <?php include "meta.php"?>
+    <?php include "meta.php" ?>
+    <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/">
+    <meta property="og:title" content="CourseReview Homepage">
     <link rel="icon" href="icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
@@ -25,7 +27,7 @@ $api = trim(file_get_contents("secret/api.txt"));
         $result = $stmt->execute();
 
         if ($result->fetchArray()) {
-            echo "<meta http-equiv=\"Refresh\" content=\"0; url='https://n.ethz.ch/~lteufelbe/coursereview/?course=$course'\" />)";
+            echo "<meta http-equiv=\"Refresh\" content=\"0; url='?course=$course'\" />)";
             $db->close();
             exit();
         }
@@ -51,7 +53,7 @@ $api = trim(file_get_contents("secret/api.txt"));
                     <?php
                     while ($row = $result->fetchArray()) {
                     ?>
-                        <li><a href="<?php echo "https://n.ethz.ch/~lteufelbe/coursereview/?course=" . htmlspecialchars($row[0]); ?>"><?php echo htmlspecialchars($row[0]) . " <b>" . htmlspecialchars($row[1]) . "</b>"; ?></a></li>
+                        <li><a href="<?php echo "?course=" . htmlspecialchars($row[0]); ?>"><?php echo htmlspecialchars($row[0]) . " <b>" . htmlspecialchars($row[1]) . "</b>"; ?></a></li>
                     <?php
                     }
                     $db->close();
@@ -83,95 +85,58 @@ $api = trim(file_get_contents("secret/api.txt"));
             </form>
 
 
+            <script>
+                //get stats
+                {
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onload = function() {
+                        if (this.status == 200) {
+                            var total = document.getElementById("total");
+                            var percourse = document.getElementById("percourse");
+                            var resp = JSON.parse(JSON.parse(this.responseText))[0];
+                            total.textContent = resp.total;
+                            percourse.textContent = resp.percourse;
+                        }
+                    }
+                    xmlhttp.open("GET", "https://rubberducky.vsos.ethz.ch:1855/stats", true);
+                    xmlhttp.send();
 
+                }
+
+                //get latest
+                {
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onload = function() {
+                        if (this.status == 200) {
+                            var latest = document.getElementById("latest");
+                            var resp = JSON.parse(JSON.parse(this.responseText));
+                            for (row of resp) {
+                                var li = document.createElement("li");
+                                var link = document.createElement("a");
+                                link.textContent = row.CourseName;
+                                link.href = "?course=" + row.CourseNumber;
+                                li.appendChild(link);
+                                latest.appendChild(li);
+                            }
+                        }
+                    }
+                    xmlhttp.open("GET", "https://rubberducky.vsos.ethz.ch:1855/latestReviews", true);
+                    xmlhttp.send();
+                }
+            </script>
 
             <h3>Welcome!</h3>
             <p>Here you can add and read reviews of courses from ETHZ!</p>
-            <a href="https://n.ethz.ch/~lteufelbe/coursereview/add/">Add a review!</a> <br>
-            <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit/">Edit your existing reviews!</a> <br>
-            <a href="https://n.ethz.ch/~lteufelbe/coursereview/all.php">All courses with reviews!</a> <br>
+            <a href="add/">Add a review!</a> <br>
+            <a href="edit/">Edit your existing reviews!</a> <br>
+            <a href="all.php">All courses with reviews!</a> <br>
             <a href="https://ergebnisseub.sp.ethz.ch/" target="_blank">Results of the Teaching evaluation</a> <br>
 
-            <?php
-            function getStats(String $token, String $api)
-            {
-                $ducky = $api . "stats";
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $ducky);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
-                $result = curl_exec($ch);
-                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch);
-                if ($code == 401) {
-                    return true;
-                }
-                if($code != 200) {
-                    print "Errorcode: " . $code;
-                }
-                $js = json_decode(json_decode($result, true), true);
-                print "<b>" .  htmlspecialchars($js[0]['total']) . "</b> reviews for <b>" . htmlspecialchars($js[0]['percourse']) . "</b> courses have been published so far.";
-                return false;
-            }
-            if (getStats($token, $api)) {
-                //get new token
-                require_once('newToken.php');
-                $token = newToken();
-                getStats($token, $api);
-            }
 
-
-
-            function getLatest(String $token, String $api)
-            {
-                $ducky = $api . "latestReviews";
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $ducky);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
-                $result = curl_exec($ch);
-                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch);
-                if ($code == 401) {
-                    return true;
-                }
-                $js = json_decode($result);
-                $js = json_decode($js);
-            ?>
-                <br> Courses with the newest Reviews:
-                <ul>
-                    <?php
-                    foreach ($js as $value) {
-                        $coursename = "";
-                        $db = new SQLite3('secret/CourseReviews.db');
-                        $stmt = $db->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
-                        $stmt->bindParam(':course', $value->CourseNumber, SQLITE3_TEXT);
-                        $qresult = $stmt->execute();
-
-                        if ($row = $qresult->fetchArray()) {
-                            $coursename = $row[0];
-                        }
-                        $db->close();
-
-                        echo '<li><a href="https://n.ethz.ch/~lteufelbe/coursereview/?course=' . htmlspecialchars($value->CourseNumber) . '">' .
-                            htmlspecialchars($value->CourseNumber) . ' <b>' . htmlspecialchars($coursename) . '</b></a></li>';
-                    }
-                    ?>
-                </ul>
-            <?php
-                return false;
-            }
-
-            if (getLatest($token, $api)) {
-                //get new token
-                require_once('newToken.php');
-                $token = newToken();
-                getLatest($token, $api);
-            }
-
-            ?>
+            <b id="total"> </b> reviews for <b id="percourse"> </b> courses have been published so far.
+            <br> Courses with the newest Reviews:
+            <ul id="latest">
+            </ul>
         </div>
     </div>
     <?php include 'includes/footer.php'; ?>
