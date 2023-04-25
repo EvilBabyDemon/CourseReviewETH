@@ -81,6 +81,12 @@ select {
     background: none;
     border-radius: 16px;
     padding: 0.5em;
+    border: solid 1px;
+}
+
+fieldset {
+    border-radius: 16px;
+    padding: 0.5em;
 }
 
 textarea,
@@ -211,8 +217,12 @@ a:visited {
     float: right;
 }
 
-
-
+input[type=submit]:hover {
+    background: var(--ftr-color);
+}
+button[type=submit]:hover {
+    background: var(--ftr-color);
+}
 
 .rating {
     display: flex;
@@ -329,7 +339,7 @@ a:visited {
     position: fixed;
     top: 27px;
     right: 10px;
-    padding: 2rem;
+    padding: 1rem;
     margin: 0 auto 1.5rem;
     color: #111111;
     color: var(--element1, #111111);
@@ -341,7 +351,7 @@ a:visited {
 .color-mode_btn svg {
     width: 30px;
     height: 30px;
-    margin-left: 7px;
+    margin-right: 7px;
     fill: none;
     stroke: #222222;
     stroke: var(--element2, #222222);
