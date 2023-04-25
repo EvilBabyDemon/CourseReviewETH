@@ -7,7 +7,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; object-src 'none'">
+    <meta http-equiv="Content-Security-Policy">
     <title>CourseReview</title>
     <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
@@ -257,11 +257,11 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                 <input name="edit" type="submit" value="Submit">
                             </p>
                             <fieldset>
-                            <?php
-                            require_once("../rating.php");
-                            includeRating($this->rating, $count);
-                            ?>
-                            </fieldset>    
+                                <?php
+                                require_once("../rating.php");
+                                includeRating($this->rating, $count);
+                                ?>
+                            </fieldset>
                             <p>
                                 <input name="submit" type="submit" value="Submit">
                                 <input name="clear" type="submit" value="Clear">
@@ -281,7 +281,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
             }
 
             foreach ($ratings as $arr) {
-                if($arr[1] == null && $arr[2] == null && $arr[3] == null && $arr[4] == null && $arr[5] === null) {
+                if ($arr[1] == null && $arr[2] == null && $arr[3] == null && $arr[4] == null && $arr[5] === null) {
                     continue;
                 }
                 $found = false;

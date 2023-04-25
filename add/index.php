@@ -7,6 +7,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
 <head>
     <meta charset="utf-8">
+    <meta http-equiv="Content-Security-Policy">
     <title>CourseReview</title>
     <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
