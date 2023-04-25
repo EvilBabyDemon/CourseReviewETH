@@ -79,14 +79,17 @@ select {
     font: inherit;
     color: var(--text-color);
     background: none;
-    border-radius: 16px;
-    padding: 0.5em;
-    border: solid 1px;
+    border: thin solid var(--text-color);
+    border-radius: 0.5em;
+    background-color: transparent;
+    padding: 0.25em 0.75em;
 }
 
 fieldset {
-    border-radius: 16px;
-    padding: 0.5em;
+    border: thin solid var(--text-color);
+    border-radius: 0.5em;
+    background-color: transparent;
+    padding: 0.25em 0.75em;
 }
 
 textarea,
@@ -204,8 +207,11 @@ a:visited {
 
 .box {
     padding: 10px;
-    border: 2px solid darkgray;
     margin: 0px;
+    border: thin solid var(--text-color);
+    border-radius: 0.5em;
+    background-color: transparent;
+    padding: 0.25em 0.75em;
 }
 
 #search {
