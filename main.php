@@ -15,7 +15,7 @@ $api = trim(file_get_contents("secret/api.txt"));
     <link rel="icon" href="icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
-    <meta name="description" content="" />
+    <meta name="description" content="Homepage of CourseReview, list of last reviewed Courses, search to find reviews of courses and other links to helpful stuff about ETHZ." />
     <link href="main.css" rel="stylesheet" type="text/css" />
     <?php
     if (isset($_POST["course"])) {

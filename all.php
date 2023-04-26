@@ -16,7 +16,7 @@ $api = trim(file_get_contents("secret/api.txt"));
     <link rel="icon" href="icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
-    <meta name="description" content="" />
+    <meta name="description" content="All courses from ETHZ with Reviews on the CourseReview website." />
     <link href="main.css" rel="stylesheet" type="text/css" />
 </head>
 

@@ -12,7 +12,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
     <link rel="icon" href="../icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
-    <meta name="description" content="" />
+    <meta name="description" content="Add reviews and ratings for courses from ETHZ to CourseReview." />
     <link href="../main.css" rel="stylesheet" type="text/css" />
 </head>
 

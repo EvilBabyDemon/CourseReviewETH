@@ -76,7 +76,7 @@ function getRatingsHead(String $course_nr, String $token, String $api)
     <link rel="icon" href="icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
-    <meta name="description" content="" />
+    <meta name="description" content="Reviews and ratings on CourseReview of a specific course from ETHZ." />
     <link href="main.css" rel="stylesheet" type="text/css" />
     <?php
     if ($course) {
