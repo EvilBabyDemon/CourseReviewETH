@@ -37,6 +37,27 @@ $api = trim(file_get_contents("secret/api.txt"));
 
 </head>
 
+<script>
+    {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onload = function() {
+            if (this.status === 200) {
+                var dataList = document.getElementById("courses");
+                var jsonOptions = JSON.parse(this.responseText);
+
+                jsonOptions.forEach(function(item) {
+                    var option = document.createElement('option');
+                    option.value = item;
+                    dataList.appendChild(option);
+                });
+            }
+        }
+        xmlhttp.open("GET", "https://n.ethz.ch/~lteufelbe/coursereview/courses.json", true);
+        xmlhttp.send();
+    }
+</script>
+
+
 <body>
     <?php include 'includes/menu.php' ?>
     <div id="content">
@@ -67,18 +88,6 @@ $api = trim(file_get_contents("secret/api.txt"));
             <form method="post" action="#">
                 <input id="search" list="courses" name="course" placeholder="Search for Reviews">
                 <datalist id="courses">
-                    <?php
-                    $db = new SQLite3('secret/CourseReviews.db');
-                    $stmt = $db->prepare("SELECT * FROM COURSES;");
-                    $result = $stmt->execute();
-
-                    while ($row = $result->fetchArray()) {
-                    ?>
-                        <option value="<?php print htmlspecialchars($row[0]) . " " . htmlspecialchars($row[1]); ?>">
-                        <?php
-                    }
-                    $db->close();
-                        ?>
                 </datalist>
                 <input id="searchbutton" type="submit" value="Search">
             </form>
