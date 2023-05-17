@@ -141,7 +141,7 @@ $api = trim(file_get_contents("secret/api.txt"));
             <a href="https://ergebnisseub.sp.ethz.ch/" target="_blank">Results of the Teaching evaluation</a> <br>
 
 
-            <b id="total"> </b> reviews for <b id="percourse"> </b> courses have been published so far.
+            <b id="total"> </b> reviews & ratings for <b id="percourse"> </b> courses have been published so far.
             <br> Courses with the newest Reviews:
             <ul id="latest">
             </ul>
