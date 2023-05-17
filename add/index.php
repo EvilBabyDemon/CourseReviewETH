@@ -67,7 +67,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                 print "Something went wrong I am sorry.";
                             } else {
                                 if ($result == '"inserted"') {
-                                    print "<h1>We received your review!</h1><p>We will verify your review to make sure it isn't attacking anyones honour.</p><br>";
+                                    print "<h1>We received your review!</h1><p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
                 ?>
                                     <script>
                                         if (localStorage.text) {
@@ -76,7 +76,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                     </script>
                 <?php
                                 } else {
-                                    print 'You already have a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit/">Edit</a> to change it.<br>';
+                                    print 'You already have a review for this course. Go under <a href="https://n.ethz.ch/~lteufelbe/coursereview/edit/">Edit</a> to change it.';
                                 }
                             }
                             return false;
@@ -96,7 +96,6 @@ $api = trim(file_get_contents("../secret/api.txt"));
                             $ducky = $api . "insertReview?";
                             $ducky = $ducky . http_build_query($data);
 
-                            $course = $_POST["course"] . " ";
                             if (submitReview($ducky, $token)) {
                                 //get new token
                                 require_once('../newToken.php');
@@ -109,12 +108,14 @@ $api = trim(file_get_contents("../secret/api.txt"));
                         $ratings = ["Recommended", "Interesting", "Difficulty", "Effort", "Resources"];
                         $ratingApi = $api . "insertRating?";
                         //submit each rating
+                        $submittedRating = false;
                         foreach ($ratings as $val) {
                             if (isset($_POST[$val]) && $_POST[$val] != 0) {
                                 if ($_POST[$val] == 0) {
                                     continue;
                                 }
                                 $empty = false;
+                                $submittedRating = true;
                                 $rating = $_POST[$val];
                                 $data = array(
                                     'course_id' => $course,
@@ -134,10 +135,15 @@ $api = trim(file_get_contents("../secret/api.txt"));
                             }
                         }
 
+                        if($submittedRating) {
+                            print "<h1>We have received your ratings!</h1>";
+                        }
+
 
                         if ($empty) {
-                            print "You neither submitted a review nor any ratings.<br>";
+                            print "You neither submitted a review nor any ratings.";
                         }
+                        print "<br>";
                     }
                 }
                 ?>
