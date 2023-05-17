@@ -20,8 +20,6 @@ $api = trim(file_get_contents("../secret/api.txt"));
     <?php include '../includes/menu.php' ?>
     <div id="content">
         <div id="columnA">
-            <p><b>Add a CourseReview here.</b><br>
-
                 <?php
                 if (isset($_POST["course"])) {
                     $exist = true;
@@ -69,7 +67,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                 print "Something went wrong I am sorry.";
                             } else {
                                 if ($result == '"inserted"') {
-                                    print "<p>We will verify your review to make sure it isn't attacking anyones honour.</p>";
+                                    print "<h1>We received your review!</h1><p>We will verify your review to make sure it isn't attacking anyones honour.</p><br>";
                 ?>
                                     <script>
                                         if (localStorage.text) {
@@ -143,7 +141,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     }
                 }
                 ?>
-
+            <p><b>Add a CourseReview here.</b><br>
             <form method="post" action="#">
                 <fieldset>
                     <legend>Review</legend>
