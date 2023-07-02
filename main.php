@@ -139,6 +139,8 @@ $api = trim(file_get_contents("secret/api.txt"));
             <a href="edit/">Edit your existing reviews!</a> <br>
             <a href="all.php">All courses with reviews!</a> <br>
             <a href="https://ergebnisseub.sp.ethz.ch/" target="_blank">Results of the Teaching evaluation</a> <br>
+            <a href="https://addons.mozilla.org/en-GB/firefox/addon/vvz-coursereview/" target="_blank">VVZ extension for Firefox</a> <br>
+            <a href="https://chrome.google.com/webstore/detail/vvz-coursereview/pjgjdmehkhpdhlpdgfbbpgekfajlhhgn" target="_blank">VVZ extension for Chrome</a> <br>
 
 
             <b id="total"> </b> reviews & ratings for <b id="percourse"> </b> courses have been published so far.
