@@ -115,7 +115,7 @@ function getRatingsHead(String $course_nr)
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="CourseReview" />
         <meta property="og:title" content="<?php print "$course_nr: $course[0]"; ?>" />
-        <meta property="og:description" content="<?php getRatingsHead($course_nr);?>" />
+        <meta property="og:description" content="<?php getRatingsHead($course_nr); ?>" />
         <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/?course=<?php print htmlspecialchars($course_nr) ?>" />
     <?php
     } else {
@@ -147,7 +147,7 @@ function getRatingsHead(String $course_nr)
                         var box = document.createElement("p");
                         box.classList.add("box");
                         box.innerText = rev["Review"];
-                        
+
                         if (rev["Semester"] != null && rev["Semester"].trim() != "") {
                             var semester = document.createElement("div");
                             semester.classList.add("semester");
@@ -155,7 +155,7 @@ function getRatingsHead(String $course_nr)
                             semester.textContent = rev["Semester"];
                             box.appendChild(semester);
                         }
-                        
+
                         reviews.appendChild(box);
                     }
                 }
