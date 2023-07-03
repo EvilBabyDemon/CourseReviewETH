@@ -61,6 +61,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                         if ("" == trim($_POST['review'])) {
                             print "<br>Review of " . htmlspecialchars($_POST["course"]) . " got removed.";
                         } else {
+                            echo "Your Review for " . htmlspecialchars($_POST["course"]) . " got updated.";
                             echo "It must be verified again, before it will show up. Give it some time.<br>";
                             echo htmlspecialchars($_POST["course"]);
                             print "<br>";
@@ -71,117 +72,132 @@ $api = trim(file_get_contents("../secret/api.txt"));
                 }
                 return false;
             }
-
             if (isset($_POST["course"])) {
                 $ducky = $api;
-                if (isset($_POST["submit"])) {
+                if (isset($_POST["update"])) {
                     $ratings = ["Recommended", "Interesting", "Difficulty", "Effort", "Resources"];
-                    $ratingApi = $api . "insertRating?";
-                    //submit each rating
-                    foreach ($ratings as $val) {
-                        if (isset($_POST[$val])) {
-                            $empty = false;
-                            $rating = $_POST[$val];
+
+                    $review = trim($_POST["review"]);
+                    $old_review = trim($_POST["old_review"]);
+                    $rat = [$_POST["Recommended"], $_POST["Interesting"], $_POST["Difficulty"], $_POST["Effort"], $_POST["Resources"]];
+                    $old_rat = explode(',', $_POST["old_rating"]);
+                    $semester = trim($_POST["semester"]);
+                    $old_semester = trim($_POST["old_semester"]);
+
+                    if ($review == $old_review && $rat == $old_rat && $semester == $old_semester) {
+            ?>
+                        You haven't changed anything. If you wanted to change something try again, if this persists please tell so.
+                    <?php
+                    }
+
+                    if ($review != $old_review) {
+                        //Edit entry
+                        if ("" == trim($_POST['review'])) {
                             $data = array(
                                 'course_id' => $_POST["course"],
                                 'user_id' => $user_id,
-                                'rating_id' => $val,
-                                'rating' => $_POST[$val]
                             );
+                            $ducky = $ducky . "removeReview?" . http_build_query($data);
+                        } else {
+                            $data = array(
+                                'course_id' => $_POST["course"],
+                                'user_id' => $user_id,
+                                'review' => $_POST["review"],
+                                'semester' => $_POST["semester"],
+                            );
+                            $ducky = $ducky . "updateReview?" . http_build_query($data);
+                        }
+                        if (review($ducky, $token)) {
+                            require_once('../newToken.php');
+                            $token = newToken();
+                            review($ducky, $token);
+                        }
+                    }
 
-                            $ducky = $ratingApi . http_build_query($data);
+                    if ($rat != $old_rat) {
+                        $ratings = ["Recommended", "Interesting", "Difficulty", "Effort", "Resources"];
+                        $ratingApi = $api . "insertRating?";
+                        //submit each rating
+                        foreach ($ratings as $val) {
+                            if (isset($_POST[$val])) {
+                                $rating = $_POST[$val];
+                                $data = array(
+                                    'course_id' => $_POST["course"],
+                                    'user_id' => $user_id,
+                                    'rating_id' => $val,
+                                    'rating' => $_POST[$val]
+                                );
 
+                                $ducky = $ratingApi . http_build_query($data);
+
+                                if (submitRating($ducky, $token)) {
+                                    //get new token
+                                    require_once('../newToken.php');
+                                    $token = newToken();
+                                    submitRating($ducky, $token);
+                                }
+                            }
+                        }
+                    ?>
+                        <b>Thanks for rating the course!</b><br>
+                        <?php
+                    }
+
+                    if ($semester != $old_semester) {
+                        $pattern = "/^[HF]S[12]\d$/";
+                        if ($semester != "" && preg_match($pattern, $semester) != 1) {
+                        ?>
+                            <b>Wrong semester input!</b>
+                        <?php
+                        } else {
+                            $data = array(
+                                'course_id' => $_POST["course"],
+                                'user_id' => $user_id,
+                                'semester' => $semester,
+                            );
+                            $ducky = $ducky . "updateSemester?" . http_build_query($data);
                             if (submitRating($ducky, $token)) {
                                 //get new token
                                 require_once('../newToken.php');
                                 $token = newToken();
                                 submitRating($ducky, $token);
                             }
+                        ?>
+                            <b>We changed your semester.</b><br>
+                    <?php
                         }
                     }
-                    print "<b>Thanks for rating the course!</b>";
                 } else if (isset($_POST["clear"])) {
                     $ratings = ["Recommended", "Interesting", "Difficulty", "Effort", "Resources"];
                     $ratingApi = $api . "removeRating?";
-                    //submit each rating
-                    foreach ($ratings as $val) {
-                        if (isset($_POST[$val])) {
-                            $empty = false;
-                            $data = array(
-                                'course_id' => $_POST["course"],
-                                'user_id' => $user_id,
-                                'rating_id' => $val,
-                            );
+                    foreach ($ratings as $rating_id) {
 
-                            $ducky = $ratingApi . http_build_query($data);
+                        $data = array(
+                            'course_id' => $_POST["course"],
+                            'user_id' => $user_id,
+                            'rating_id' => $rating_id
+                        );
+                        $ducky = $ratingApi . http_build_query($data);
 
-                            if (submitRating($ducky, $token)) {
-                                //get new token
-                                require_once('../newToken.php');
-                                $token = newToken();
-                                submitRating($ducky, $token);
-                            }
+                        if (submitRating($ducky, $token)) {
+                            //get new token
+                            require_once('../newToken.php');
+                            $token = newToken();
+                            submitRating($ducky, $token);
                         }
                     }
-                    print "<b>We removed the rating of the course.</b>";
-                } else if (isset($_POST["edit"])) {
-
-                    //Edit entry
-                    if ("" == trim($_POST['review'])) {
-                        $data = array(
-                            'course_id' => $_POST["course"],
-                            'user_id' => $user_id,
-                        );
-                        $ducky = $ducky . "removeReview?" . http_build_query($data);
-                    } else {
-                        $data = array(
-                            'course_id' => $_POST["course"],
-                            'user_id' => $user_id,
-                            'review' => $_POST["review"],
-                        );
-                        $ducky = $ducky . "updateReview?" . http_build_query($data);
-                    }
-                    if (review($ducky, $token)) {
-                        require_once('../newToken.php');
-                        $token = newToken();
-                        review($ducky, $token);
-                    }
+                    ?>
+                    <b>We removed the rating of the course.</b><br>
+            <?php
                 }
             }
             ?>
 
             <?php
 
-            function getUserRatings(String $user_id, String $token, String $api)
-            {
-
-                $ducky = $api . "userRating/";
-                $ducky = $ducky . $user_id;
-                $ch = curl_init();
-                curl_setopt($ch, CURLOPT_URL, $ducky);
-                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                curl_setopt($ch, CURLOPT_CAINFO, "../cacert-2022-04-26.pem");
-                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
-
-                $result = curl_exec($ch);
-                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                curl_close($ch);
-                if ($code == 401) {
-                    return false;
-                }
-                if ($code != 200) {
-                    return false;
-                }
-                if (strlen($result) > 2) {
-                    $js = json_decode($result, false);
-                    return $js;
-                }
-                return true;
-            }
-
             function getUserReviews(String $user_id, String $token, String $api)
             {
-                $ducky = $api . "userReview/";
+                $ducky = $api . "userStuff/";
                 $ducky = $ducky . $user_id;
                 $ch = curl_init();
                 curl_setopt($ch, CURLOPT_URL, $ducky);
@@ -197,24 +213,17 @@ $api = trim(file_get_contents("../secret/api.txt"));
                 }
 
                 if (strlen($result) > 2) {
-                    $js = json_decode($result, false);
+                    $js = json_decode(json_decode($result, false), true);
                     return $js;
                 }
                 return true;
             }
 
-            if (!$ratings = getUserRatings($user_id, $token, $api)) {
+            if (!$reviews = getUserReviews($user_id, $token, $api)) {
                 //get new token
                 require_once('../newToken.php');
                 $token = newToken();
-                $ratings = getUserRatings($user_id, $token, $api);
-            }
-
-            if (!$reviews = getUserReviews($user_id, $token, $api, $ratings)) {
-                //get new token
-                require_once('../newToken.php');
-                $token = newToken();
-                $reviews = getUserReviews($user_id, $token, $api, $ratings);
+                $reviews = getUserReviews($user_id, $token, $api);
             }
 
 
@@ -224,10 +233,14 @@ $api = trim(file_get_contents("../secret/api.txt"));
                 public $course_id;
                 public $review;
                 public $rating;
+                public $semester;
 
                 // Methods
                 function printCourse($count)
                 {
+                    if ($this->rating == null) {
+                        $this->rating = [0, 0, 0, 0, 0];
+                    }
                     $dbc = new SQLite3('../secret/CourseReviews.db');
                     $stmtc = $dbc->prepare("SELECT NAME FROM COURSES WHERE COURSE=:course");
                     $stmtc->bindParam(':course', $this->course_id, SQLITE3_TEXT);
@@ -235,26 +248,49 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     $rowc = $resultc->fetchArray();
 
                     echo "<br>";
-                    if ($this->review[1] == 0) {
-                        echo "<b>Not yet verified!</b><br>";
-                    } elseif ($this->review[1] == -1) {
-                        echo "<div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>";
-                    }
-
+                    if ($this->review[1] != null && $this->review[1] == 0) {
             ?>
-                    <form method="post" action="index.php">
+                        <b>Not yet verified!</b><br>
+                    <?php
+                    } elseif ($this->review[1] != null && $this->review[1] == -1) {
+                    ?>
+                        <div style='color:red;'>Review was rejected! Edit it and remove anything that's attacking a person or anything else that might have gotten it rejected.</div><br>
+                    <?php
+                    }
+                    ?>
+                    <form method="post" action="">
                         <fieldset>
+                            <textarea name="old_review" hidden><?php print htmlspecialchars($this->review[0]); ?></textarea>
+                            <input name="old_semester" value="<?php print htmlspecialchars($this->semester); ?>" hidden>
+                            <input name="old_rating" value="<?php print htmlspecialchars(implode(', ', $this->rating)); ?>" hidden>
+
                             <legend><?php echo htmlspecialchars("$rowc[0]"); ?></legend>
                             <label>
                                 <input style="color:red" name="course" value="<?php echo htmlspecialchars($this->course_id); ?>" readonly>
                                 <br>
-                                <textarea name="review" rows="4"><?php echo htmlspecialchars($this->review[0]); ?></textarea>
+                                <textarea name="review" rows="4"><?php print htmlspecialchars($this->review[0]); ?></textarea>
                             </label>
-
-                            <div name="old_review" value="<?php print htmlspecialchars($this->review[0]) ?>"></div>
-                            <div name="old_rating" value="<?php print $this->rating ?>"></div>
                             <p>
-                                <input name="edit" type="submit" value="Submit">
+                                Took it in Semester: <br>
+                                <select name="semester">
+                                    <option <?php if ($this->semester == null || $this->semester == "") {
+                                                print "selected";
+                                            } ?>></option>
+                                    <?php
+                                    for ($i = 23; $i > 17;) {
+                                        $fs = "FS" . $i;
+                                        $hs = "HS" . --$i;
+                                    ?>
+                                        <option <?php if ($this->semester == $fs) {
+                                                    print "selected";
+                                                } ?>> <?php print $fs ?> </option>
+                                        <option <?php if ($this->semester == $hs) {
+                                                    print "selected";
+                                                } ?>> <?php print $hs ?> </option>
+                                    <?php
+                                    }
+                                    ?>
+                                </select>
                             </p>
                             <fieldset>
                                 <?php
@@ -263,8 +299,8 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                 ?>
                             </fieldset>
                             <p>
-                                <input name="submit" type="submit" value="Submit">
-                                <input name="clear" type="submit" value="Clear">
+                                <input name="clear" type="submit" value="Clear rating">
+                                <input name="update" type="submit" value="Update changes">
                             </p>
                         </fieldset>
                     </form>
@@ -274,32 +310,14 @@ $api = trim(file_get_contents("../secret/api.txt"));
 
             $reviewArr = [];
             foreach ($reviews as $arr) {
-                $tmp_review = new Review();
-                $tmp_review->course_id = $arr[0];
-                $tmp_review->review = [$arr[1], $arr[2]];
-                array_push($reviewArr, $tmp_review);
-            }
-
-            foreach ($ratings as $arr) {
-                if ($arr[1] == null && $arr[2] == null && $arr[3] == null && $arr[4] == null && $arr[5] === null) {
-                    continue;
-                }
-                $found = false;
-                foreach ($reviewArr as $rev) {
-                    if ($rev->course_id == $arr[0]) {
-                        $rev->rating = [$arr[1], $arr[2], $arr[3], $arr[4], $arr[5]];
-                        $found = true;
-                        break;
-                    }
-                }
-
-                if ($found) {
+                if ($arr["Recommended"] == null && $arr["Interesting"] == null && $arr["Difficulty"] == null && $arr["Effort"] == null && $arr["Resources"] == null && $arr["Review"] == null) {
                     continue;
                 }
                 $tmp_review = new Review();
-                $tmp_review->course_id = $arr[0];
-                $tmp_review->rating = [$arr[1], $arr[2], $arr[3], $arr[4], $arr[5]];
-                $tmp_review->review = ["", 1];
+                $tmp_review->course_id = $arr["CourseNumber"];
+                $tmp_review->review = [$arr["Review"], $arr["VerificationStatus"]];
+                $tmp_review->semester = $arr["Semester"];
+                $tmp_review->rating = [$arr["Recommended"], $arr["Interesting"], $arr["Difficulty"], $arr["Effort"], $arr["Resources"]];
                 array_push($reviewArr, $tmp_review);
             }
             $counter = 0;

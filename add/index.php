@@ -136,12 +136,57 @@ $api = trim(file_get_contents("../secret/api.txt"));
                         }
 
                         if($submittedRating) {
-                            print "<h1>We have received your ratings!</h1>";
+                            print "<h1>We received your ratings!</h1>";
                         }
-
 
                         if ($empty) {
                             print "You neither submitted a review nor any ratings.";
+                        } else if (isset($_POST["semester"])) {
+                            //update Semester
+                            function updateSemester(String $ducky, String $token)
+                            {
+                                $ch = curl_init($ducky);
+                                curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+                                curl_setopt($ch, CURLINFO_HEADER_OUT, true);
+                                curl_setopt($ch, CURLOPT_POST, true);
+                                curl_setopt($ch, CURLOPT_CAINFO, "../cacert-2022-04-26.pem");
+                                curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+
+                                // Set HTTP Header for POST request
+                                curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json', 'Authorization: Bearer ' . $token));
+
+                                $result = curl_exec($ch);
+                                $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+                                // Close cURL session handle
+                                curl_close($ch);
+
+                                if ($code == 401) {
+                                    print $result;
+                                    return true;
+                                }
+                                // handle curl error
+                                if ($code != 200) {
+                                    print "Error Code: $code <br>";
+                                    print "Something went wrong I am sorry.";
+                                }
+                                return false;
+                            }
+                            $data = array(
+                                'course_id' => $course,
+                                'user_id' => $user_id,
+                                'semester' => $_POST["semester"]
+                            );
+
+                            $ducky = $api . "updateSemester?";
+                            $ducky = $ducky . http_build_query($data);
+
+                            if (updateSemester($ducky, $token)) {
+                                //get new token
+                                require_once('../newToken.php');
+                                $token = newToken();
+                                updateSemester($ducky, $token);
+                            }
+
                         }
                         print "<br>";
                     }
@@ -157,18 +202,6 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                                                                                                                                             echo "value=\"" . $_GET["course"] . "\"";
                                                                                                                                                         } ?> required>
                         <datalist id="courses">
-                            <?php
-                            $db = new SQLite3('../secret/CourseReviews.db');
-                            $stmt = $db->prepare("SELECT * FROM COURSES");
-                            $result = $stmt->execute();
-
-                            while ($row = $result->fetchArray()) {
-                            ?>
-                                <option value="<?php echo "$row[0] $row[1]"; ?>">
-                                <?php
-                            }
-                            $db->close();
-                                ?>
                         </datalist>
                     </p>
                     <p>
@@ -186,6 +219,26 @@ $api = trim(file_get_contents("../secret/api.txt"));
                             localStorage.text = e.target.value;
                         }
                     </script>
+                    <br>
+                    <p>
+                        Took it in Semester: <br>
+                        <select name="semester">
+                            <option selected></option>
+                            <option>FS23</option>
+                            <option>HS22</option>
+                            <option>FS22</option>
+                            <option>FS21</option>
+                            <option>HS21</option>
+                            <option>HS20</option>
+                            <option>FS20</option>
+                            <option>HS19</option>
+                            <option>FS19</option>
+                            <option>HS18</option>
+                            <option>FS18</option>
+                            <option>HS17</option>
+                        </select>
+                    </p>
+                    <br>
                     <?php
                     require_once("../rating.php");
                     includeRating(null, 0);
@@ -195,6 +248,25 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     </p>
                 </fieldset>
             </form>
+            <script>
+                {
+                    var xmlhttp = new XMLHttpRequest();
+                    xmlhttp.onload = function() {
+                        if (this.status === 200) {
+                            var dataList = document.getElementById("courses");
+                            var jsonOptions = JSON.parse(this.responseText);
+
+                            jsonOptions.forEach(function(item) {
+                                var option = document.createElement('option');
+                                option.value = item;
+                                dataList.appendChild(option);
+                            });
+                        }
+                    }
+                    xmlhttp.open("GET", "https://n.ethz.ch/~lteufelbe/coursereview/courses.json", true);
+                    xmlhttp.send();
+                }
+            </script>
 
         </div>
     </div>
