@@ -1,11 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-$token = file_get_contents("secret/key.txt");
-$api = trim(file_get_contents("secret/api.txt"));
-?>
-
-<?php
 if (!isset($_GET["course"])) {
     exit();
 }
@@ -24,29 +19,24 @@ if ($course) {
 ?>
 
 <?php
-function getRatingsHead(String $course_nr, String $token, String $api)
+function getRatingsHead(String $course_nr)
 {
-    $ducky = $api . "rating/";
+    $ducky = "https://rubberducky.vsos.ethz.ch:1855/rating/";
     $ducky = $ducky . $course_nr;
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $ducky);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
 
     $result = curl_exec($ch);
     $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
-    if ($code == 401) {
-        return true;
-    }
     if ($code != 200) {
-        return false;
+        print($code);
+        return;
     }
     $js = json_decode($result, false);
     $js = json_decode($js, false);
-    $sum = 0.0;
-    $acc = 0.0;
 
     $rating_names = [
         "AVG(Recommended)" => "Would <b>recommend</b> it",
@@ -64,9 +54,49 @@ function getRatingsHead(String $course_nr, String $token, String $api)
         //Printing star amount with respective Description
         print "[" . $rating_names[$nkey] . ": " . round(doubleval($stars), 2) . "] ";
     }
-    return false;
+    return;
 }
 ?>
+<script>
+    //add ratings body
+    function addRatings() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onload = function() {
+            if (this.status == 200) {
+
+                var ratings = {
+                    "AVG(Recommended)": "Would <b>recommend</b> it",
+                    "AVG(Interesting)": "<b>Interesting</b> content",
+                    "AVG(Difficulty)": "Approriate <b>difficulty</b>",
+                    "AVG(Effort)": "Approriate amount of <b>effort</b>",
+                    "AVG(Resources)": "Amount and quality of <b>resources</b>"
+                };
+
+                var resp = JSON.parse(JSON.parse(this.responseText))[0];
+                var stars = document.createElement("div");
+
+                for (var key in ratings) {
+                    //body
+                    var div = document.createElement("div");
+                    div.innerHTML = ratings[key];
+                    var starsOuter = document.createElement("div");
+                    starsOuter.classList.add("stars-outer");
+                    var starsInner = document.createElement("div");
+                    starsInner.classList.add("stars-inner");
+                    starsInner.style = "width: " + Math.round(resp[key] * 20) + "%;";
+
+                    div.appendChild(starsOuter);
+                    starsOuter.appendChild(starsInner);
+
+                    stars.appendChild(div);
+                }
+                document.getElementById("columnA").insertBefore(stars, document.getElementById("columnA").firstChild);
+            }
+        }
+        xmlhttp.open("GET", "https://rubberducky.vsos.ethz.ch:1855/rating/" + window.location.href.split("?course=")[1], true);
+        xmlhttp.send();
+    }
+</script>
 
 
 <head>
@@ -85,15 +115,8 @@ function getRatingsHead(String $course_nr, String $token, String $api)
         <meta property="og:type" content="website" />
         <meta property="og:site_name" content="CourseReview" />
         <meta property="og:title" content="<?php print "$course_nr: $course[0]"; ?>" />
-        <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/<?php print $course_url ?>" />
-        <meta property="og:description" content="<?php
-                                                    if (getRatingsHead($course_nr, $token, $api, false)) {
-                                                        //get new token
-                                                        require_once('newToken.php');
-                                                        $token = newToken();
-                                                        getRatingsHead($course_nr, $token, $api, false);
-                                                    }
-                                                    ?>" />
+        <meta property="og:description" content="<?php getRatingsHead($course_nr);?>" />
+        <meta property="og:url" content="https://n.ethz.ch/~lteufelbe/coursereview/?course=<?php print htmlspecialchars($course_nr) ?>" />
     <?php
     } else {
         require("meta.php");
@@ -106,106 +129,61 @@ function getRatingsHead(String $course_nr, String $token, String $api)
     ?>
 </head>
 
+<script>
+    //add reviews
+    function addReviews() {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onload = function() {
+            if (this.status == 200) {
+
+                var resp = JSON.parse(JSON.parse(this.responseText));
+
+                var reviews = document.createElement("div");
+                if (resp.length == 0) {
+                    reviews.textContent = "There is no review here yet. Would be nice if you add one if you took this course.";
+                } else {
+                    for (var rev of resp) {
+                        reviews.appendChild(document.createElement("br"));
+                        var box = document.createElement("p");
+                        box.classList.add("box");
+                        box.innerText = rev["Review"];
+                        
+                        if (rev["Semester"] != null && rev["Semester"].trim() != "") {
+                            var semester = document.createElement("div");
+                            semester.classList.add("semester");
+                            semester.classList.add("box");
+                            semester.textContent = rev["Semester"];
+                            box.appendChild(semester);
+                        }
+                        
+                        reviews.appendChild(box);
+                    }
+                }
+                document.getElementById("columnA").appendChild(reviews);
+            }
+        }
+        xmlhttp.open("GET", "https://rubberducky.vsos.ethz.ch:1855/course/" + window.location.href.split("?course=")[1], true);
+        xmlhttp.send();
+    }
+</script>
+
+
 <body>
     <?php include 'includes/menu.php' ?>
     <div id="content">
         <div id="columnA">
 
             <?php
+
             if ($course) {
                 print "<b>$course_nr $course[0]</b><br>";
                 $db->close();
-
-                function getAvg(String $course_nr, String $token, String $api)
-                {
-                    $ducky = $api . "rating/";
-                    $ducky = $ducky . $course_nr;
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, $ducky);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
-
-                    $result = curl_exec($ch);
-                    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                    curl_close($ch);
-                    if ($code == 401) {
-                        return true;
-                    }
-                    if ($code != 200) {
-                        return false;
-                    }
-                    $js = json_decode($result, false);
-                    $js = json_decode($js, false);
-
-                    $rating_names = [
-                        "AVG(Recommended)" => "Would <b>recommend</b> it",
-                        "AVG(Interesting)" => "<b>Interesting</b> content",
-                        "AVG(Difficulty)" => "Approriate <b>difficulty</b>",
-                        "AVG(Effort)" => "Approriate amount of <b>effort</b>",
-                        "AVG(Resources)" => "Amount and quality of <b>resources</b>"
-                    ];
-
-                    foreach ($js[0] as $nkey => $stars) {
-                        if ($stars == null) {
-                            continue;
-                        }
-
-                        print $rating_names[$nkey];
             ?>
-                        <div class="stars-outer">
-                            <div class="stars-inner" style="width: <?php echo (intval(doubleval($stars) * 20)) ?>%;"></div>
-                        </div>
-                        <br>
+                <script>
+                    addRatings();
+                    addReviews();
+                </script>
             <?php
-                    }
-                    return false;
-                }
-
-                function getReviews(String $course_nr, String $token, String $api)
-                {
-                    $ducky = $api . "course/";
-                    $ducky = $ducky . $course_nr;
-                    $ch = curl_init();
-                    curl_setopt($ch, CURLOPT_URL, $ducky);
-                    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-                    curl_setopt($ch, CURLOPT_CAINFO, "cacert-2022-04-26.pem");
-                    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Authorization: Bearer ' . $token));
-
-                    $result = curl_exec($ch);
-                    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-                    curl_close($ch);
-                    if ($code == 401) {
-                        return true;
-                    }
-
-                    $js = json_decode($result, false);
-                    $js = json_decode($js, false);
-
-                    if (sizeof($js) == 0) {
-                        echo "There is no review here yet. Would be nice if you add one if you took this course.";
-                    }
-
-                    foreach ($js as $val) {
-                        foreach ($val as $nkey => $review) {
-                            echo "<br> <div class=\"box\">" . nl2br(htmlspecialchars($review)) . "</div>";
-                        }
-                    }
-                    return false;
-                }
-                if (getAvg($course_nr, $token, $api)) {
-                    //get new token
-                    require_once('newToken.php');
-                    $token = newToken();
-                    getAvg($course_nr, $token, $api);
-                }
-
-                if (getReviews($course_nr, $token, $api)) {
-                    //get new token
-                    require_once('newToken.php');
-                    $token = newToken();
-                    getReviews($course_nr, $token, $api);
-                }
             } else {
                 echo 'This course number is not correct! If you think there should be a course with that number please contact me.';
             }
