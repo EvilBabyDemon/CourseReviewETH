@@ -1,2 +1,1 @@
-- possibility to add semester person took it in
- 
+Nothing planned at the moment, if you have any ideas what to add feel free to reach out!
