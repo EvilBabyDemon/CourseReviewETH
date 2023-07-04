@@ -85,6 +85,10 @@ select {
     padding: 0.25em 0.75em;
 }
 
+option {
+    background: var(--bkg-color);
+}
+
 fieldset {
     border: thin solid var(--text-color);
     border-radius: 0.5em;
