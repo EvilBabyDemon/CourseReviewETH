@@ -13,6 +13,7 @@ $stmt->bindParam(':course', $course_nr, SQLITE3_TEXT);
 $result = $stmt->execute();
 $course = $result->fetchArray();
 $course_url = "";
+$db->close();
 if ($course) {
     $course_url = "?course=" . $course_nr;
 }
@@ -90,7 +91,7 @@ function getRatingsHead(String $course_nr)
 
                     stars.appendChild(div);
                 }
-                document.getElementById("columnA").insertBefore(stars, document.getElementById("columnA").firstChild);
+                document.getElementById("columnA").insertBefore(stars, document.getElementById("reviews"));
             }
         }
         xmlhttp.open("GET", "https://rubberducky.vsos.ethz.ch:1855/rating/" + window.location.href.split("?course=")[1], true);
@@ -102,7 +103,7 @@ function getRatingsHead(String $course_nr)
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy">
-    <title>CourseReview</title>
+    <title><?php if ($course) { print $course[0] . " - "; } ?>CourseReview</title>
     <link rel="icon" href="icon.png" type="image/icon type">
     <meta name="viewport" content="width=device-width">
     <meta name="keywords" content="" />
@@ -139,6 +140,7 @@ function getRatingsHead(String $course_nr)
                 var resp = JSON.parse(JSON.parse(this.responseText));
 
                 var reviews = document.createElement("div");
+                reviews.id = "reviews";
                 if (resp.length == 0) {
                     reviews.textContent = "There is no review here yet. Would be nice if you add one if you took this course.";
                 } else {
@@ -177,7 +179,6 @@ function getRatingsHead(String $course_nr)
 
             if ($course) {
                 print "<b>$course_nr $course[0]</b><br>";
-                $db->close();
             ?>
                 <script>
                     addRatings();

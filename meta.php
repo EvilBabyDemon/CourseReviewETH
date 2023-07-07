@@ -1,7 +1,7 @@
 <?php
-function getMetaStats(String $api)
+function getMetaStats()
 {
-    $ducky = $api . "stats";
+    $ducky = "https://rubberducky.vsos.ethz.ch:1855/stats";
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $ducky);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -15,7 +15,7 @@ function getMetaStats(String $api)
     $js = json_decode(json_decode($result, true), true);
     return $js;
 }
-$metaStats = getMetaStats($api);
+$metaStats = getMetaStats();
 $metaString = "";
 if (!is_bool($metaStats)) {
     $metaString = ": " . htmlspecialchars($metaStats[0]['total']) . " reviews & ratings for " . htmlspecialchars($metaStats[0]['percourse']) . " courses";
