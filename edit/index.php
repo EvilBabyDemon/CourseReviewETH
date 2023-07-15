@@ -105,7 +105,7 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                 'review' => $_POST["review"],
                                 'semester' => $_POST["semester"],
                             );
-                            $ducky = $ducky . "updateReview?" . http_build_query($data);
+                            $ducky = $ducky . "insertReview?" . http_build_query($data);
                         }
                         if (review($ducky, $token)) {
                             require_once('../newToken.php');
