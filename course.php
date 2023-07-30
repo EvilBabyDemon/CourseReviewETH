@@ -77,6 +77,9 @@ function getRatingsHead(String $course_nr)
                 var stars = document.createElement("div");
 
                 for (var key in ratings) {
+                    if (resp[key] == null) {
+                        continue;
+                    }
                     //body
                     var div = document.createElement("div");
                     div.innerHTML = ratings[key];
