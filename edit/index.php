@@ -271,26 +271,10 @@ $api = trim(file_get_contents("../secret/api.txt"));
                                 <textarea name="review" rows="4"><?php print htmlspecialchars($this->review[0]); ?></textarea>
                             </label>
                             <p>
-                                Took it in Semester: <br>
-                                <select name="semester">
-                                    <option <?php if ($this->semester == null || $this->semester == "") {
-                                                print "selected";
-                                            } ?>></option>
-                                    <?php
-                                    for ($i = 23; $i > 17;) {
-                                        $fs = "FS" . $i;
-                                        $hs = "HS" . --$i;
-                                    ?>
-                                        <option <?php if ($this->semester == $fs) {
-                                                    print "selected";
-                                                } ?>> <?php print $fs ?> </option>
-                                        <option <?php if ($this->semester == $hs) {
-                                                    print "selected";
-                                                } ?>> <?php print $hs ?> </option>
-                                    <?php
-                                    }
-                                    ?>
-                                </select>
+                            <?php   
+                                require_once("../semester.php");
+                                addSemester($this->semester);
+                            ?>
                             </p>
                             <fieldset>
                                 <?php

@@ -220,22 +220,10 @@ $api = trim(file_get_contents("../secret/api.txt"));
                     </script>
                     <br>
                     <p>
-                        Took it in Semester: <br>
-                        <select name="semester">
-                            <option selected></option>
-                            <option>FS23</option>
-                            <option>HS22</option>
-                            <option>FS22</option>
-                            <option>FS21</option>
-                            <option>HS21</option>
-                            <option>HS20</option>
-                            <option>FS20</option>
-                            <option>HS19</option>
-                            <option>FS19</option>
-                            <option>HS18</option>
-                            <option>FS18</option>
-                            <option>HS17</option>
-                        </select>
+                    <?php
+                        require_once("../semester.php");
+                        addSemester(null);
+                    ?>
                     </p>
                     <br>
                     <?php
