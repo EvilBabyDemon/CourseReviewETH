@@ -8,7 +8,7 @@ function addSemester($semester)
                     print "selected";
                 } ?>></option>
         <?php
-        for ($i = 24; $i > 17;) {
+        for ($i = 25; $i > 17;) {
             $fs = "FS" . $i;
             $hs = "HS" . --$i;
         ?>
